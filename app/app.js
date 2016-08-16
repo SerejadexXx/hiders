@@ -28,6 +28,10 @@ var addresses = [
     }
 ];
 
+app.get('/', function(req, res) {
+    res.sendFile('index.html');
+});
+
 app.get('/rooms/free', function(req, res) {
     var rez = null;
     addresses.forEach(function(address) {
@@ -51,7 +55,7 @@ app.get('/rooms/free', function(req, res) {
 require('./routes/roomServer.js').Start(server, app);
 
 var createRequest = require('./createRequest.js');
-/*setInterval(function() {
+setInterval(function() {
     addresses.forEach(function(address) {
         var options = {
             host: address.host,
@@ -68,6 +72,6 @@ var createRequest = require('./createRequest.js');
             }
         });
     });
-}, 1000);*/
+}, 1000);
 
 module.exports = app;
