@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hiders</title>
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/icons/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/icons/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/icons/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/icons/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/icons/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/icons/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/icons/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/icons/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/icons/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/icons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="manifest" href="/icons/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/socket.io-client/socket.io.js"></script>
+
+    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+
+    <link href="index.css" rel="stylesheet">
+    <script src="app.js"></script>
+</head>
+<body ng-app="indexApp" ng-controller="mainCtrl" style="overflow: hidden">
+    <div style="position:relative;width:100%;height:100%;overflow: hidden" ng-show="viewState=='list'">
+        <canvas width="1500" height="800" id="notMain"></canvas>
+        <div class="preGameCover">
+            <div class="container-fluid">
+                <div class="row textCenter">
+                    <img class="mainLogo" src="/assets/logo.png" alt="logo">
+                </div>
+                <div class="row textCenter">
+                    <form name="nameForm">
+                        <input type="text"
+                               class="nameInputWrapper"
+                               autofocus maxlength="15"
+                               ng-model="enteredName.val"
+                               placeholder="Your name" name="usernameInput">
+                        <br/>
+                        <span ng-show="nameForm.usernameInput.$error.pattern">Please use numbers letters only</span>
+                    </form>
+                </div>
+                <div class="row textCenter">
+                    <button class="btn roomEnterButton" ng-click="EnterRoom()">Enter free room</button>
+                </div>
+                <div class="row textCenter roomEnterError">
+                    {{serverError}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="position:relative;width:100%;height:100%;overflow: hidden" ng-show="viewState=='room'">
+        <canvas width="1500" height="800" id="mainCanvas"></canvas>
+        <div ng-show="gameState.val == 'game'" class="sideMenu">
+            <div class="container-fluid infoList">
+                <div class="row">
+                    <div class="col-xs-12 infoListHeader">
+                        <h4>Top Hiders</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 infoListItem" ng-show="topScores.length >= 1">
+                        <p style="color: rgb(255,215,0)" ng-show="!topScores[0].isCurrentPlayer">
+                            1. {{topScores[0].name}} ({{topScores[0].totalScore}})
+                        </p>
+                        <b style="color: rgb(255,215,0)" ng-show="topScores[0].isCurrentPlayer">
+                            1. {{topScores[0].name}} ({{topScores[0].totalScore}})
+                        </b>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 infoListItem" ng-show="topScores.length >= 2">
+                        <p style="color: rgb(192,192,192)" ng-show="!topScores[1].isCurrentPlayer">
+                            2. {{topScores[1].name}} ({{topScores[1].totalScore}})
+                        </p>
+                        <b style="color: rgb(192,192,192)" ng-show="topScores[1].isCurrentPlayer">
+                            2. {{topScores[1].name}} ({{topScores[1].totalScore}})
+                        </b>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 infoListItem" ng-show="topScores.length >= 3">
+                        <p style="color: rgb(205,127,50)" ng-show="!topScores[2].isCurrentPlayer">
+                            3. {{topScores[2].name}} ({{topScores[2].totalScore}})
+                        </p>
+                        <b style="color: rgb(205,127,50)" ng-show="topScores[2].isCurrentPlayer">
+                            3. {{topScores[2].name}} ({{topScores[2].totalScore}})
+                        </b>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 infoListHeader">
+                        <h4>Teams</h4>
+                    </div>
+                </div>
+                <div class="row infoListItem" ng-repeat="team in teamsInfo">
+                    <div class="col-xs-4">
+                        <img class="teamInfoIco" ng-src="{{team.src}}" alt="team-avatar">
+                    </div>
+                    <div class="col-xs-8 teamInfoDisp">
+                        <p ng-style="{color: team.color}">
+                            {{team.disp}} {{team.size}}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12 infoListHeader">
+                        <h4>Time remaining</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 boostPercent textCenter">
+                        <p>{{gameState.timeRemaining | formatSeconds | date:'mm:ss'}} lefts</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 infoListHeader">
+                        <h4>Boost</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 boostPercent textCenter">
+                        <p>{{percentBoost}}% lefts</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 infoListItem textCenter">
+                        <p><b>Click</b> for SpeedUp</p>
+                    </div>
+                </div>
+                <div class="row" ng-show="playerTypeObj.key != 4">
+                    <div class="col-xs-12 infoListItem textCenter">
+                        <p><b>X</b> for x-Ray</p>
+                    </div>
+                </div>
+                <div class="row" ng-show="playerTypeObj.key != 4">
+                    <div class="col-xs-12 infoListItem textCenter">
+                        <p><b>Space</b> to shot the wall</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 infoListHeader">
+                        <h4 ng-style="{color: playerTypeObj.color}">{{playerTypeObj.disp}}:</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 infoListHeader">
+                        <h4 ng-style="{color: playerTypeObj.color}">{{playerTypeObj.bonus}}</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 infoListHeader">
+                        <button class="btn btn-default btn-block" ng-click="LeaveRoom()">
+                            Leave Room <i class="glyphicon glyphicon-circle-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-show="gameState.val == 'choosePlayer' && winnerState.val == 'off'" class="preGameCover">
+            <div class="container-fluid">
+                <div ng-show="playerTeamObj != null">
+                    <div class="row playerTeamWrapper">
+                        <div class="col col-xs-offset-4 col-xs-4">
+                            <h3>
+                                <span style="color: rgb(30, 31, 35)">You're in</span>
+                                <span ng-style="{color: playerTeamObj.color}">{{playerTeamObj.disp}}</span>
+                                <span style="color: rgb(30, 31, 35)">team</span>
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="row playerTypesWrapper">
+                        <div ng-repeat="playerType in playerTypes"
+                             ng-class="{
+                                'col-xs-offset-1': $index == 0,
+                                'col-xs-2': true
+                            }"
+                             ng-click="SelectPlayerType(playerType.key)">
+                                <img ng-src="{{playerTeamObj.src + playerType.src}}"
+                                     ng-class="{
+                                        playerTypeImg: true,
+                                        playerTypeImgSelected: selectedPlayerType == playerType.key
+                                     }"
+                                     alt="avatar">
+                            <h4 class="playerTypeName" ng-style="{color: playerType.color}">{{playerType.disp}}</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="row startGameButtonWrapper" ng-show="selectedPlayerType != null">
+                    <button class="btn startGameButton"
+                            ng-style="{
+                        backgroundColor: playerTypes[selectedPlayerType].color
+                        }" ng-click="PlayerTypeSelected()">Start a disaster</button>
+                </div>
+                <div class="row startGameTextWrapper" ng-show="shouldSelect && selectedPlayerType == null">
+                    <h3>Choose your player!</h3>
+                </div>
+            </div>
+        </div>
+        <div ng-show="gameState.val == 'waiting' && winnerState.val == 'off'" class="preGameCover">
+            <div class="container-fluid">
+                <div class="row waitingStateDescription">
+                    <img ng-src="{{playerTeamObj.src + playerTypeObj.src}}"
+                         ng-class="{
+                                        playerTypeImg: true,
+                                        playerTypeImgSelected: true
+                                     }"
+                         alt="avatar">
+                    <h3>Waiting for players</h3>
+                    <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>
+                </div>
+            </div>
+        </div>
+        <div ng-show="winnerState.val == 'on'" class="preGameCover winningStateWrapper">
+            <div class="winningStateElements">
+                <img ng-repeat="img in winnerState.img"
+                     ng-src="{{winnerState.srcPref + img.src}}"
+                     class="winningStateElement"
+                     ng-style="{
+                                top: img.top + 'px',
+                                left: img.left + 'px',
+                                width: img.width + 'px',
+                                height: img.height + 'px'
+                             }"
+                     alt="avatar">
+                <div class="winningStateText">
+                    <h3 ng-style="{color: winnerState.color}">{{winnerState.text}}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

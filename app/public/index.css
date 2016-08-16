@@ -1,0 +1,242 @@
+.preGameCover {
+    position:absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 110%;
+    background-color: rgba(50, 50, 50, 0.9);
+}
+
+.mainLogo {
+    margin-top: 100px;
+    border: 3px solid grey;
+    border-radius: 20px;
+}
+
+.nameInputWrapper {
+    margin-top: 70px;
+    border: 3px solid grey;
+    border-radius: 3px;
+    font-size: 20px;
+    width: 200px;
+    color: rgb(50, 50, 50);
+}
+
+.roomEnterButton {
+    background-color: #00bfff;
+    margin-top: 30px;
+    width: 250px;
+    color: rgb(50, 50, 50);
+}
+
+.roomEnterError {
+    margin-top: 10px;
+    color: red;
+}
+
+.preGameNameInput {
+    position:absolute;
+    left: 50%;
+    top: 100px;
+    width: 60px;
+    margin-left: -30px;
+}
+
+.playerTypesWrapper {
+    margin-top: 20px;
+    text-align: center;
+}
+
+
+.playerTypeImg {
+    border: 2px solid black;
+    width: 150px;
+    height: 150px;
+    margin: 0 20px;
+    border-radius: 75px;
+    background-color: white;
+}
+
+.playerTypeImgSelected {
+    border: 2px solid rgb(160, 160, 160);
+}
+
+.playerTypeImg:hover {
+    cursor: pointer;
+}
+
+.playerTypeImg:active {
+    border: 2px solid rgb(200, 200, 200);
+}
+
+.playerTypeName {
+    text-align: center;
+}
+
+.startGameButtonWrapper {
+    margin-top: 50px;
+    text-align: center;
+}
+
+.startGameTextWrapper {
+    margin-top: 50px;
+    text-align: center;
+    color: rgb(255,255,51);
+}
+
+.startGameButton {
+    width: 150px;
+    font-size: 18px;
+    color: white;
+}
+
+.playerTeamWrapper {
+    text-align: center;
+    margin-top: 110px;
+}
+
+.sideMenu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 190px;
+}
+
+.infoList {
+    border: 2px solid black;
+    border-radius: 5px;
+    background-color: white;
+}
+
+.infoListHeader {
+    text-align: center;
+}
+
+.infoListItem {
+    padding-left: 10px;
+    text-overflow: ellipsis;
+}
+
+.teamInfoIco {
+    width: 50px;
+    height: 50px;
+}
+
+.teamInfoDisp {
+    padding-top: 10px;
+}
+
+.boostPipe {
+    height: 10px;
+    border: 2px solid orange;
+    border-radius: 4px;
+}
+
+.boostPercent {
+    text-align: center;
+    color: orange;
+}
+
+.textCenter {
+    text-align: center;
+}
+
+.waitingStateDescription {
+    margin-top: 200px;
+    color: white;
+    text-align: center;
+}
+
+.winningStateWrapper {
+}
+
+.winningStateElements {
+    position: relative;
+    width: 1000px;
+    height: 400px;
+    margin: 100px auto;
+}
+
+.winningStateText {
+    position: absolute;
+    top: 350px;
+    left: 50%;
+    width: 200px;
+    margin-left: -100px;
+    text-align: center;
+}
+.winningStateElement {
+    position: absolute;
+    border-radius: 50%;
+    -moz-animation: pulsate 100ms linear infinite alternate;
+    -webkit-animation: pulsate 100ms linear infinite alternate;
+    animation: pulsate 100ms linear infinite alternate;
+}
+
+
+@-webkit-keyframes pulsate {
+    0% {
+        -ms-transform: rotate(0deg); /* IE 9 */
+        -webkit-transform: rotate(0deg); /* Chrome, Safari, Opera */
+        transform: rotate(0deg)
+    }
+    33% {
+        -ms-transform: rotate(5deg); /* IE 9 */
+        -webkit-transform: rotate(5deg); /* Chrome, Safari, Opera */
+        transform: rotate(5deg)
+    }
+    66% {
+        -ms-transform: rotate(-5deg); /* IE 9 */
+        -webkit-transform: rotate(-5deg); /* Chrome, Safari, Opera */
+        transform: rotate(-5deg)
+    }
+    100% {
+        -ms-transform: rotate(0deg); /* IE 9 */
+        -webkit-transform: rotate(0deg); /* Chrome, Safari, Opera */
+        transform: rotate(0deg)
+    }
+}
+@-moz-keyframes pulsate {
+    0% {
+        -ms-transform: rotate(0deg); /* IE 9 */
+        -webkit-transform: rotate(0deg); /* Chrome, Safari, Opera */
+        transform: rotate(0deg)
+    }
+    33% {
+        -ms-transform: rotate(5deg); /* IE 9 */
+        -webkit-transform: rotate(5deg); /* Chrome, Safari, Opera */
+        transform: rotate(5deg)
+    }
+    66% {
+        -ms-transform: rotate(-5deg); /* IE 9 */
+        -webkit-transform: rotate(-5deg); /* Chrome, Safari, Opera */
+        transform: rotate(-5deg)
+    }
+    100% {
+        -ms-transform: rotate(0deg); /* IE 9 */
+        -webkit-transform: rotate(0deg); /* Chrome, Safari, Opera */
+        transform: rotate(0deg)
+    }
+}
+@keyframes pulsate {
+    0% {
+        -ms-transform: rotate(0deg); /* IE 9 */
+        -webkit-transform: rotate(0deg); /* Chrome, Safari, Opera */
+        transform: rotate(0deg)
+    }
+    33% {
+        -ms-transform: rotate(5deg); /* IE 9 */
+        -webkit-transform: rotate(5deg); /* Chrome, Safari, Opera */
+        transform: rotate(5deg)
+    }
+    66% {
+        -ms-transform: rotate(-5deg); /* IE 9 */
+        -webkit-transform: rotate(-5deg); /* Chrome, Safari, Opera */
+        transform: rotate(-5deg)
+    }
+    100% {
+        -ms-transform: rotate(0deg); /* IE 9 */
+        -webkit-transform: rotate(0deg); /* Chrome, Safari, Opera */
+        transform: rotate(0deg)
+    }
+}
