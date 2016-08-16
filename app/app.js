@@ -48,6 +48,7 @@ app.get('/rooms/free', function(req, res) {
     }
 });
 
+require('./routes/roomServer.js').Start(server, app);
 
 var createRequest = require('./createRequest.js');
 setInterval(function() {
@@ -68,7 +69,5 @@ setInterval(function() {
         });
     });
 }, 1000);
-
-require('./routes/roomServer.js').Start(server, app);
 
 module.exports = app;
