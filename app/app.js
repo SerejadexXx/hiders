@@ -51,7 +51,7 @@ app.get('/rooms/free', function(req, res) {
 require('./routes/roomServer.js').Start(server, app);
 
 var createRequest = require('./createRequest.js');
-setInterval(function() {
+/*setInterval(function() {
     addresses.forEach(function(address) {
         var options = {
             host: address.host,
@@ -68,6 +68,6 @@ setInterval(function() {
             }
         });
     });
-}, 1000);
+}, 1000);*/
 
 module.exports = app;
