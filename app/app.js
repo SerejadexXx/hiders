@@ -22,7 +22,7 @@ var maxPermittedAmount = 30;
 var addresses = [
     {
         host: '37.139.26.152',
-        post: 8125,
+        port: 8125,
         val: 'ws://37.139.26.152:8125',
         amount: 0
     }

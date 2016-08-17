@@ -239,6 +239,11 @@ module.controller('mainCtrl', function(
                 userId: 'id_' + Math.round(Math.random() * 1000000000)
             });
         });
+        socket.on('disconnect', function() {
+            $scope.$apply(function() {
+                $scope.viewState = 'list';
+            });
+        });
         $scope.LeaveRoom = function() {
             socket.disconnect();
             $scope.viewState = 'list';
