@@ -97,6 +97,7 @@ module.exports = {
             var updater = null;
             var roundUpdater = null;
             var socketTeamsUpdateId = roundId;
+            var loginUpdater = null;
             socket.on('data', function(data) {
                 if (!data) {
                     return;
@@ -116,6 +117,9 @@ module.exports = {
                     team: added.team,
                     gameState: 'choosePlayer'
                 });
+                loginUpdater = setTimeout(function() {
+                    socket.disconnect();
+                }, 15000);
             });
 
             roundUpdater = setInterval(
@@ -134,6 +138,12 @@ module.exports = {
                             clearInterval(updater);
                             updater = null;
                         }
+                        if (loginUpdater) {
+                            clearTimeout(loginUpdater);
+                        }
+                        loginUpdater = setTimeout(function() {
+                            socket.disconnect();
+                        }, 15000);
                     }
                 }, 20
             );
@@ -145,6 +155,7 @@ module.exports = {
                 if (!AssertInputInteger(data.playerType, 0, 4)) {
                     return;
                 }
+                clearTimeout(loginUpdater);
                 usersSet.SetPlayerType(id, data.playerType);
                 usersSet.UpdatePosition(id, segmentsSet);
                 var user = usersSet.UserById(id);
@@ -249,12 +260,16 @@ module.exports = {
             });
 
             socket.on('disconnect', function(data) {
+                console.log('dis');
                 usersSet.RemoveUser(id);
                 io.emit('infoUpdate', {
                     usersInfoList: usersSet.GetInfoList()
                 });
                 clearInterval(updater);
                 clearInterval(roundUpdater);
+                if (loginUpdater) {
+                    clearTimeout(loginUpdater);
+                }
                 CheckEnd();
             });
         });
