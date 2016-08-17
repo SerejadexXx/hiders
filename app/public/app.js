@@ -294,7 +294,7 @@ module.controller('mainCtrl', function(
                         var kickTimeoutFunc = function () {
                             $scope.kickInSec--;
                             if ($scope.kickInSec > 0) {
-                                kickTimeoutFunc();
+                                kickTimeout = $timeout(kickTimeoutFunc, 1000);
                             }
                         };
                         //console.log($scope.kickInSec);
