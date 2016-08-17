@@ -317,9 +317,14 @@ module.controller('mainCtrl', function(
                             $scope.kickInSec = 15;
                         }
                         $timeout.cancel(kickTimeout);
-                        kickTimeout = $timeout(function() {
+                        var kickTimeoutFunc = function() {
                             $scope.kickInSec--;
-                        }, 1);
+                            if ($scope.kickInSec > 0) {
+                                kickTimeoutFunc();
+                            }
+                        };
+                        console.log($scope.kickInSec);
+                        kickTimeout = $timeout(kickTimeoutFunc, 1000);
                     });
                 }
                 if (data.gameState.timeRemaining) {
