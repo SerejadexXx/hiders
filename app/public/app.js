@@ -287,6 +287,19 @@ module.controller('mainCtrl', function(
                         return team.key == $scope.playerTeam;
                     })[0];
                     $scope.gameState.val = data.gameState.val;
+                    if ($scope.gameState.val == 'choosePlayer') {
+                        $scope.kickInSec = 15;
+
+                        $timeout.cancel(kickTimeout);
+                        var kickTimeoutFunc = function () {
+                            $scope.kickInSec--;
+                            if ($scope.kickInSec > 0) {
+                                kickTimeoutFunc();
+                            }
+                        };
+                        //console.log($scope.kickInSec);
+                        kickTimeout = $timeout(kickTimeoutFunc, 1000);
+                    }
 
                     $scope.shouldSelect = true;
                     $scope.selectedPlayerType = null;
@@ -314,18 +327,6 @@ module.controller('mainCtrl', function(
                 if (data.gameState.val) {
                     $scope.$apply(function () {
                         $scope.gameState.val = data.gameState.val;
-                        if ($scope.gameState.val == 'choosePlayer') {
-                            $scope.kickInSec = 15;
-                        }
-                        $timeout.cancel(kickTimeout);
-                        var kickTimeoutFunc = function() {
-                            $scope.kickInSec--;
-                            if ($scope.kickInSec > 0) {
-                                kickTimeoutFunc();
-                            }
-                        };
-                        //console.log($scope.kickInSec);
-                        kickTimeout = $timeout(kickTimeoutFunc, 1000);
                     });
                 }
                 if (data.gameState.timeRemaining) {
