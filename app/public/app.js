@@ -252,6 +252,7 @@ module.controller('mainCtrl', function(
             socket.emit('playerType', {
                 playerType: $scope.selectedPlayerType
             });
+            $scope.gameState.val = 'waiting';
             $scope.selectedPlayerType = null;
             $scope.shouldSelect = false;
         };
