@@ -68,7 +68,8 @@ module.controller('mainCtrl', function(
     $scope,
     segmentsFunctional,
     renderingFunctional,
-    $http
+    $http,
+    $timeout
 ) {
     var mainInterval;
     var keydownEventListener;
@@ -104,6 +105,7 @@ module.controller('mainCtrl', function(
 
 
     // room viewState
+    var kickTimeout = null;
     var startGame = function(address, userName) {
         $scope.shouldSelect = true;
         $scope.playerTeams = [
@@ -311,6 +313,13 @@ module.controller('mainCtrl', function(
                 if (data.gameState.val) {
                     $scope.$apply(function () {
                         $scope.gameState.val = data.gameState.val;
+                        if ($scope.gameState.val == 'choosePlayer') {
+                            $scope.kickInSec = 15;
+                        }
+                        $timeout.cancel(kickTimeout);
+                        kickTimeout = $timeout(function() {
+                            $scope.kickInSec--;
+                        }, 1);
                     });
                 }
                 if (data.gameState.timeRemaining) {

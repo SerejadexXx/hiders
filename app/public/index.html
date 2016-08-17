@@ -207,6 +207,9 @@
                         backgroundColor: playerTypes[selectedPlayerType].color
                         }" ng-click="PlayerTypeSelected()">Start a disaster</button>
                 </div>
+                <div class="row kickInWrapper">
+                    Choose or will be kicked in {{kickInSec}} second(s)
+                </div>
                 <div class="row startGameTextWrapper" ng-show="shouldSelect && selectedPlayerType == null">
                     <h3>Choose your player!</h3>
                 </div>
