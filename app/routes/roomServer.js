@@ -109,6 +109,10 @@ module.exports = {
                     return;
                 }
 
+                if (usersSet.UserById(data.userId) != null) {
+                    socket.disconnect();
+                }
+
                 var name = data.userName;
                 id = data.userId;
                 var added = usersSet.AddUser(id, name, segmentsSet);
@@ -260,7 +264,9 @@ module.exports = {
             });
 
             socket.on('disconnect', function(data) {
-                console.log('dis');
+                if (id == null) {
+                    return;
+                }
                 usersSet.RemoveUser(id);
                 io.emit('infoUpdate', {
                     usersInfoList: usersSet.GetInfoList()
