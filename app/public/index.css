@@ -246,3 +246,7 @@
         transform: rotate(0deg)
     }
 }
+
+.marginBottom10 {
+    margin-bottom: 10px;
+}
