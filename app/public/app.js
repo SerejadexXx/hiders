@@ -286,7 +286,7 @@ module.controller('mainCtrl', function(
                     $scope.playerTeamObj = $scope.playerTeams.filter(function (team) {
                         return team.key == $scope.playerTeam;
                     })[0];
-                    $scope.gameState.val = data.gameState;
+                    $scope.gameState.val = data.gameState.val;
 
                     $scope.shouldSelect = true;
                     $scope.selectedPlayerType = null;
@@ -310,9 +310,9 @@ module.controller('mainCtrl', function(
             }
 
             if (data.gameState) {
+                //console.log(data.gameState.val);
                 if (data.gameState.val) {
                     $scope.$apply(function () {
-                        console.log(data.gameState.val);
                         $scope.gameState.val = data.gameState.val;
                         if ($scope.gameState.val == 'choosePlayer') {
                             $scope.kickInSec = 15;
