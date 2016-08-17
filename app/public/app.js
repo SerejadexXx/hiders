@@ -323,7 +323,7 @@ module.controller('mainCtrl', function(
                                 kickTimeoutFunc();
                             }
                         };
-                        console.log($scope.kickInSec);
+                        //console.log($scope.kickInSec);
                         kickTimeout = $timeout(kickTimeoutFunc, 1000);
                     });
                 }

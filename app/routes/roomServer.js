@@ -119,7 +119,9 @@ module.exports = {
 
                 socket.emit('infoUpdate', {
                     team: added.team,
-                    gameState: 'choosePlayer'
+                    gameState: {
+                        val: 'choosePlayer'
+                    }
                 });
                 loginUpdater = setTimeout(function() {
                     socket.disconnect();
@@ -135,7 +137,9 @@ module.exports = {
                     if (roundId != socketTeamsUpdateId) {
                         socket.emit('infoUpdate', {
                             team: user.team,
-                            gameState: 'choosePlayer'
+                            gameState: {
+                                val: 'choosePlayer'
+                            }
                         });
                         socketTeamsUpdateId = roundId;
                         if (updater) {
