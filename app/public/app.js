@@ -616,7 +616,11 @@ module.controller('mainCtrl', function(
                         return user.groupId == player.groupId;
                     })[0];
                     if (farUser) {
-                        drawFarPlayer(player.angleDeg, farUser.team, farUser.name);
+                        drawFarPlayer(
+                            player.angleDeg,
+                            farUser.team,
+                            farUser.name + " (" + CalcTotalScore(farUser) + ")"
+                        );
                     }
                 });
                 drawPlayer(
