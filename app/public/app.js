@@ -234,7 +234,9 @@ module.controller('mainCtrl', function(
             canvas.height
         );
         var ctx = canvas.getContext('2d');
-        var socket = io.connect(address);
+        var socket = io.connect(address, {
+            reconnection: false
+        });
         socket.on('connect', function () {
             socket.emit('data', {
                 userName: userName,
