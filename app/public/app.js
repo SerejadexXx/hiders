@@ -312,6 +312,7 @@ module.controller('mainCtrl', function(
             if (data.gameState) {
                 if (data.gameState.val) {
                     $scope.$apply(function () {
+                        console.log(data.gameState.val);
                         $scope.gameState.val = data.gameState.val;
                         if ($scope.gameState.val == 'choosePlayer') {
                             $scope.kickInSec = 15;
