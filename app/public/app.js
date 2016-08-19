@@ -238,9 +238,13 @@ module.controller('mainCtrl', function(
             });
         });
         socket.on('disconnect', function() {
-            $scope.$apply(function() {
+            if(!$scope.$$phase) {
                 $scope.viewState = 'list';
-            });
+            } else {
+                $scope.$apply(function () {
+                    $scope.viewState = 'list';
+                });
+            }
         });
         $scope.LeaveRoom = function() {
             socket.disconnect();

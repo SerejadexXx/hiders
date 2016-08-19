@@ -119,7 +119,7 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-12 boostPercent textCenter">
-                        <p>{{gameState.timeRemaining | formatSeconds | date:'mm:ss'}} time remaining</p>
+                        <p>{{gameState.timeRemaining | formatSeconds | date:'mm:ss'}} remaining</p>
                     </div>
                 </div>
                 <div class="row">
@@ -231,7 +231,7 @@
                              }"
                      alt="avatar">
                 <div class="winningStateText">
-                    <h3 ng-style="{color: winnerState.color}">{{winnerState.text}}</h3>
+                    <h3 ng-style="{color: winnerState.color}">Round is over</h3>
                 </div>
             </div>
         </div>
