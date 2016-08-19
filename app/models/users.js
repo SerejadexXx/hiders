@@ -330,6 +330,9 @@ module.exports = {
             var user = users.filter(function(user) {
                 return user.id == id;
             })[0];
+            if (!user) {
+                return [];
+            }
 
             var rez = [];
             users.forEach(function(curUser) {
@@ -359,6 +362,9 @@ module.exports = {
             var user = users.filter(function(user) {
                 return user.id == id;
             })[0];
+            if (!user) {
+                return [];
+            }
 
             var rez = [];
             users.forEach(function(curUser) {
@@ -374,11 +380,25 @@ module.exports = {
                 //!segmentsSet.Intersects(user.x, user.y, curUser.x, curUser.y))
                 ) {
                     rez.push({
-                        angleDeg: Math.round(180 * Math.atan2(curUser.y - user.y, curUser.x - user.x) / Math.PI),
+                        angleDeg: Math.round(18000 * Math.atan2(curUser.y - user.y, curUser.x - user.x) / Math.PI) / 100,
                         groupId: curUser.groupId
                     });
                 }
             });
+            var rezFiltered = [];
+            rez.sort(function(a, b) {
+                return a.angleDeg - b.angleDeg;
+            }).forEach(function(val) {
+                if (rezFiltered.length == 0) {
+                    rezFiltered.push(val);
+                    return;
+                }
+                if (rezFiltered[rezFiltered.length - 1].angleDeg + 5 > val.angleDeg) {
+                    return;
+                }
+                rezFiltered.push(val);
+            });
+
             return rez;
         };
         this.HaveTeams = function() {

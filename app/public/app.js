@@ -56,18 +56,12 @@ module.service('segmentsFunctional', function() {
         }
         return points;
     };
-});
 
-module.service('renderingFunctional', function() {
-    this.DrawPlayerTypes = function(ctx, $scope) {
-
-    };
 });
 
 module.controller('mainCtrl', function(
     $scope,
     segmentsFunctional,
-    renderingFunctional,
     $http,
     $timeout
 ) {
@@ -319,6 +313,7 @@ module.controller('mainCtrl', function(
                         return type.key == user.playerType
                     })[0];
                 });
+                lastUpdateTime = Date.now();
             }
             if (user == null) {
                 return;
@@ -470,15 +465,10 @@ module.controller('mainCtrl', function(
                 ctx.strokeStyle = 'rgb(253, 13, 93)';
             }
             ctx.lineWidth = 3;
-            //var playerBall = segmentsFunctional.BuildChain(x, y, r);
 
             ctx.save();
             ctx.beginPath();
-            /*
-             ctx.moveTo(Math.round(playerBall[0].x + visibleWidth / 2 - user.x), Math.round(playerBall[0].y + visibleHeight / 2 - user.y));
-             for (var i = 1; i < playerBall.length; i++) {
-             ctx.lineTo(Math.round(playerBall[i].x + visibleWidth / 2 - user.x), Math.round(playerBall[i].y + visibleHeight / 2 - user.y));
-             }*/
+
             ctx.moveTo(x - user.x + visibleWidth / 2 + r, y - user.y + visibleHeight / 2);
             ctx.arc(x - user.x + visibleWidth / 2, y - user.y + visibleHeight / 2, r, 0, 2 * Math.PI);
             ctx.clip();
@@ -486,10 +476,6 @@ module.controller('mainCtrl', function(
             ctx.restore();
 
             ctx.beginPath();
-            /*ctx.moveTo(Math.round(playerBall[0].x + visibleWidth / 2 - user.x), Math.round(playerBall[0].y + visibleHeight / 2 - user.y));
-             for (var i = 1; i < playerBall.length; i++) {
-             ctx.lineTo(Math.round(playerBall[i].x + visibleWidth / 2 - user.x), Math.round(playerBall[i].y + visibleHeight / 2 - user.y));
-             }*/
             ctx.moveTo(x - user.x + visibleWidth / 2 + r, y - user.y + visibleHeight / 2);
             ctx.arc(x - user.x + visibleWidth / 2, y - user.y + visibleHeight / 2, r, 0, 2 * Math.PI);
             ctx.stroke();
@@ -514,7 +500,7 @@ module.controller('mainCtrl', function(
             for (var dist = 2000; dist > 1; dist /= 2) {
                 var nx = x + dist * Math.cos(angle);
                 var ny = y + dist * Math.sin(angle);
-                if (nx > 30 && nx < visibleWidth - 250 && ny > 30 && ny < visibleHeight - 60) {
+                if (nx > 60 && nx < visibleWidth - 250 && ny > 30 && ny < visibleHeight - 60) {
                     x = nx;
                     y = ny;
                 }
@@ -526,6 +512,7 @@ module.controller('mainCtrl', function(
         };
 
         clearInterval(mainInterval);
+        var lastUpdateTime = Date.now();
         mainInterval = setInterval(function () {
             visibleWidth = Math.min(
                 Math.max(document.documentElement.clientWidth, window.innerWidth || 0),
@@ -633,6 +620,7 @@ module.controller('mainCtrl', function(
                     user.playerType,
                     user.name + " (" + CalcTotalScore(user) + ")"
                 );
+                lastUpdateTime = Date.now();
 
 
                 ctx.beginPath();
