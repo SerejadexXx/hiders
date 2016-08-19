@@ -8,7 +8,7 @@ var bodyParser = require('body-parser');
 
 var app = express();
 var server = require('http').Server(app);
-server.listen(8125);
+server.listen(8080);
 
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -59,7 +59,7 @@ app.get('/rooms/free', function(req, res) {
     }
 });
 
-require('./routes/roomServer.js').Start(server, app);
+//require('./routes/roomServer.js').Start(server, app);
 
 var createRequest = require('./createRequest.js');
 setInterval(function() {
