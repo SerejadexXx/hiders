@@ -399,7 +399,7 @@ module.exports = {
                 rezFiltered.push(val);
             });
 
-            return rez;
+            return rezFiltered;
         };
         this.HaveTeams = function() {
             var teams = [0, 0, 0];
