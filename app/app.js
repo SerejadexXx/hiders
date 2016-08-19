@@ -63,6 +63,7 @@ app.get('/rooms/free', function(req, res) {
 
 var createRequest = require('./createRequest.js');
 setInterval(function() {
+    console.log('success');
     addresses.forEach(function(address) {
         var options = {
             host: address.host,
