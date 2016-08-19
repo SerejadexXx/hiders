@@ -238,7 +238,7 @@ module.controller('mainCtrl', function(
             });
         });
         socket.on('disconnect', function() {
-            if(!$scope.$$phase) {
+            if($scope.$$phase) {
                 $scope.viewState = 'list';
             } else {
                 $scope.$apply(function () {
