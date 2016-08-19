@@ -74,7 +74,6 @@ setInterval(function() {
             }
         };
         createRequest.process(options, function(statusCode, result) {
-            console.log(result.amount);
             if (result && result.amount) {
                 address.amount = result.amount;
             }
