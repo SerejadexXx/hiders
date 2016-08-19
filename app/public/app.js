@@ -244,7 +244,7 @@ module.controller('mainCtrl', function(
         });
         $scope.LeaveRoom = function() {
             socket.disconnect();
-            $scope.viewState = 'list';
+           // $scope.viewState = 'list';
         };
         $scope.PlayerTypeSelected = function () {
             socket.emit('playerType', {
