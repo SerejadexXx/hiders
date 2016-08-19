@@ -19,22 +19,21 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/bower_components',  express.static(__dirname + '/bower_components'));
 
 var maxPermittedAmount = 30;
-var addresses = [
-    {
+var addresses = /*[{
         host: 'localhost',
         port: 8125,
         val: 'ws://localhost:8125',
         amount: 0
     }
-];
-    /*[
-    {
+];*/
+
+    [{
         host: '37.139.26.152',
         port: 8125,
         val: 'ws://37.139.26.152:8125',
         amount: 0
     }
-];*/
+];
 
 app.get('/', function(req, res) {
     res.sendFile('index.html');
