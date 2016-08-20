@@ -77,13 +77,15 @@ module.controller('mainCtrl', function(
     $scope.EnterRoom = function() {
         if (!processing) {
             var ConvertName = function(str) {
-                while (str.indexOf('<') >= 0) {
-                    str[str.indexOf('<')] = '_';
+                var rez = "";
+                for (var i = 0; i < str.length; i++) {
+                    if (str[i] == '<' || str[i] == '<') {
+                        rez = rez + "_";
+                    } else {
+                        rez = rez + str[i];
+                    }
                 }
-                while (str.indexOf('>') >= 0) {
-                    str[str.indexOf('>')] = '_';
-                }
-                return str || "Anonymous";
+                return rez || "Anonymous";
             };
             $scope.serverError = null;
             processing = true;
