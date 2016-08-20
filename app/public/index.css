@@ -1,6 +1,33 @@
 .landingLogo {
     width: 100%;
     background-color: rgb(50, 50, 50);
+    min-height: 100vh;
+}
+
+.landingLogoImg {
+    margin-top: 50px;
+    margin-bottom: 20px;
+    width: 80%;
+    border: 3px solid grey;
+    border-radius: 20px;
+}
+
+.landingContainer {
+    background-color: rgb(50, 50, 50);
+}
+
+.imgInline {
+    width: 40px;
+    border: 2px solid grey;
+    border-radius: 50%;
+}
+
+.landingFooter {
+    width: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 50px;
 }
 
 .preGameCover {
