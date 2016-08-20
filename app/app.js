@@ -45,10 +45,27 @@ app.get('/rooms/free', function(req, res) {
         if (rez) {
             return;
         }
-        if (address.amount < maxPermittedAmount) {
+        if (address.amount != 0 && address.amount < maxPermittedAmount / 2) {
             rez = address;
         }
     });
+    addresses.forEach(function(address) {
+        if (rez) {
+            return;
+        }
+        if (address.amount != 0 && address.amount < maxPermittedAmount) {
+            rez = address;
+        }
+    });
+    addresses.forEach(function(address) {
+        if (rez) {
+            return;
+        }
+        if (address.amount == 0) {
+            rez = address;
+        }
+    });
+
     if (!rez) {
         res.sendStatus(503);
     } else {
