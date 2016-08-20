@@ -79,7 +79,7 @@ module.controller('mainCtrl', function(
             var ConvertName = function(str) {
                 var rez = "";
                 for (var i = 0; i < str.length; i++) {
-                    if (str[i] == '<' || str[i] == '<') {
+                    if (str[i] == '<' || str[i] == '>') {
                         rez = rez + "_";
                     } else {
                         rez = rez + str[i];
