@@ -76,13 +76,22 @@ module.controller('mainCtrl', function(
     var processing = false;
     $scope.EnterRoom = function() {
         if (!processing) {
+            var ConvertName = function(str) {
+                while (str.indexOf('<') >= 0) {
+                    str[str.indexOf('<')] = '_';
+                }
+                while (str.indexOf('>') >= 0) {
+                    str[str.indexOf('>')] = '_';
+                }
+                return str || "Anonymous";
+            };
             $scope.serverError = null;
             processing = true;
             $http.get('/rooms/free', {}).then(
                 function(response) {
                     processing = false;
                     $scope.viewState = 'room';
-                    startGame(response.data.address, $scope.enteredName.val || "Anonymous");
+                    startGame(response.data.address, ConvertName($scope.enteredName.val));
                 },
                 function(response) {
                     processing = false;
