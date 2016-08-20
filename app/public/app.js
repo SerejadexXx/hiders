@@ -65,6 +65,11 @@ module.controller('mainCtrl', function(
     $http,
     $timeout
 ) {
+    $scope.showLanding = false;
+    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+        $scope.showLanding = true;
+        return;
+    }
     var mainInterval;
     var keydownEventListener;
     var mousedownEventListener;
