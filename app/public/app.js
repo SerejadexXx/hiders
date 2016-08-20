@@ -477,6 +477,13 @@ module.controller('mainCtrl', function(
         });
 
         var drawPlayer = function (x, y, r, team, playerType, name) {
+            if (team == null || playerType == null) {
+                console.error('user team or playerType undefined');
+                console.log(team);
+                console.log(playerType);
+                console.log('name: ' + name);
+                return;
+            }
             if (team == 0) {
                 ctx.strokeStyle = 'rgb(13, 93, 253)';
             } else if (team == 1) {

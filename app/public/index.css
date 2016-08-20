@@ -1,3 +1,8 @@
+.landingLogo {
+    width: 100%;
+    background-color: rgb(50, 50, 50);
+}
+
 .preGameCover {
     position:absolute;
     left: 0;
