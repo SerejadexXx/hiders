@@ -305,6 +305,27 @@ module.exports = {
             });
         });
 
+        var GetScoreChange = function(val) {
+            if (val < -1000) {
+                return 1;
+            }
+            if (val < -500) {
+                return 10;
+            }
+            if (val < 0) {
+                return 50;
+            }
+            if (val < 500) {
+                return 100;
+            }
+            if (val < 1000) {
+                return 200;
+            }
+            if (val < 2000) {
+                return 300;
+            }
+            return 400;
+        };
         setInterval(function() {
             var users = usersSet.GetList();
             var shot = function(x, y) {
@@ -384,8 +405,9 @@ module.exports = {
                             teamsChanged = true;
                             user2.team = user1.team;
                             user2.boostSize = 0;
-                            user1.scorePlus += 2;
-                            user2.scoreMinus += 2;
+                            var diff = GetScoreChange(user2.scorePlus);
+                            user1.scorePlus += diff;
+                            user2.scorePlus -= diff;
                         }
                     }
                 });

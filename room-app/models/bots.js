@@ -49,7 +49,7 @@ module.exports = {
                 if ((team + 2) % 3 == user.team) {
                     if (d1 > d2) {
                         if (DistToCloseBorder(px, py, radius, segments) > DistToCloseBorder(x, y, radius, segments)) {
-                            power += (d1 - d2) * 1.1 / d1;
+                            power += (d1 - d2) * 1.5 / d1;
                         } else {
                             power += (d1 - d2) / d1;
                         }
@@ -57,9 +57,9 @@ module.exports = {
                 } else {
                     if (DistToCloseBorder(px, py, radius, segments) > DistToCloseBorder(x, y, radius, segments)) {
                         if (d2 < d1) {
-                            power += (d2 - d1) * 2.2 / d1;
+                            power += (d2 - d1) * 2 / d1;
                         } else {
-                            power += (d2 - d1) * 2.1 / d1;
+                            power += (d2 - d1) / d1;
                         }
                     } else {
                         power += (d2 - d1) * 2 / d1;
@@ -93,9 +93,9 @@ module.exports = {
                     return;
                 }
                 if ((team + 2) % 3 == user.team) {
-                    power += (Math.PI * 2 - AngleDiff(angle, user.angleDeg / 180 * Math.PI)) / 1500;
+                    power += (Math.PI * 2 - AngleDiff(angle, user.angleDeg / 180 * Math.PI)) / 500;
                 } else {
-                    power -= (Math.PI * 2 - AngleDiff(angle, user.angleDeg / 180 * Math.PI)) / 1000;
+                    power -= (Math.PI * 2 - AngleDiff(angle, user.angleDeg / 180 * Math.PI)) / 2000;
                     //console.log(angle + " " + user.angleDeg / 180 * Math.PI + " " + AngleDiff(angle, user.angleDeg / 180 * Math.PI));
                 }
             });
