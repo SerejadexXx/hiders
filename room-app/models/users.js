@@ -460,8 +460,14 @@ module.exports = {
                 teams[x]++;
                 last = x;
             }
+            var it = 0;
             users.forEach(function(user) {
-                user.team = GetRandomInt(0, 2);
+                if (it < 3) {
+                    user.team = it;
+                    it++;
+                } else {
+                    user.team = GetRandomInt(0, 2);
+                }
                 while (teams[user.team] == 0) {
                     user.team = GetRandomInt(0, 2);
                 }
