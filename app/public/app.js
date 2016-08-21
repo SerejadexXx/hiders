@@ -8,8 +8,22 @@ module.filter('formatSeconds', [function() {
 
 module.service('segmentsFunctional', function() {
     var segments = [];
+    var Width = 0;
+    var Height = 0;
+    this.GetWidth = function() {
+        return Width;
+    };
+    this.GetHeight = function() {
+        return Height;
+    };
     this.Set = function(_segments) {
         segments = _segments;
+        Width = 0;
+        Height = 0;
+        segments.forEach(function(segment) {
+            Width = Math.max(Width, segment.p2.x);
+            Height = Math.max(Height, segment.p2.y);
+        });
     };
     this.BuildChain = function(x, y, r) {
         var dist = function(x, y, x1, y1) {
@@ -592,6 +606,43 @@ module.controller('mainCtrl', function(
                 ctx.strokeStyle = 'black';
                 ctx.setLineDash([1, 6]);
                 ctx.lineWidth = 1;
+
+                for (var dx = -visibleWidth / 2; dx <= segmentsFunctional.GetWidth() + visibleWidth; dx += 7) {
+                    ctx.moveTo(
+                        dx - user.x + visibleWidth / 2,
+                        0 - user.y + visibleHeight / 2
+                    );
+                    ctx.lineTo(
+                        dx - user.x + visibleWidth / 2,
+                        0 - user.y + visibleHeight / 2 - visibleHeight / 2
+                    );
+                    ctx.moveTo(
+                        dx - user.x + visibleWidth / 2,
+                        segmentsFunctional.GetHeight() - user.y + visibleHeight / 2
+                    );
+                    ctx.lineTo(
+                        dx - user.x + visibleWidth / 2,
+                        segmentsFunctional.GetHeight() - user.y + visibleHeight / 2 + visibleHeight / 2
+                    );
+                }
+                for (var dy = 1; dy < segmentsFunctional.GetHeight(); dy += 7) {
+                    ctx.moveTo(
+                        0 - user.x + visibleWidth / 2,
+                        dy - user.y + visibleHeight / 2
+                    );
+                    ctx.lineTo(
+                        0 - user.x + visibleWidth / 2 - visibleWidth / 2,
+                        dy - user.y + visibleHeight / 2
+                    );
+                    ctx.moveTo(
+                        segmentsFunctional.GetWidth() - user.x + visibleWidth / 2,
+                        dy - user.y + visibleHeight / 2
+                    );
+                    ctx.lineTo(
+                        segmentsFunctional.GetWidth() - user.x + visibleWidth / 2 + visibleWidth / 2,
+                        dy - user.y + visibleHeight / 2
+                    );
+                }
                 segments.forEach(function (segment) {
                     ctx.moveTo(segment.p1.x - user.x + visibleWidth / 2, segment.p1.y - user.y + visibleHeight / 2);
                     ctx.lineTo(segment.p2.x - user.x + visibleWidth / 2, segment.p2.y - user.y + visibleHeight / 2);

@@ -327,102 +327,102 @@ module.exports = {
             return 400;
         };
         setInterval(function() {
-            var users = usersSet.GetList();
-            var shot = function(x, y) {
-                //console.log(x + " " + y + " " + users[0].shotRadius);
-                segmentsSet.Shot(x, y, users[0].shotRadius);
-                io.emit('infoUpdate', {
-                    segments: segmentsSet.GetMaze(),
-                    shotPosition: {
-                        x: x,
-                        y: y,
-                        r: users[0].shotRadius
-                    }
+            if (gameState.val == 'game') {
+                var users = usersSet.GetList();
+                var shot = function (x, y) {
+                    //console.log(x + " " + y + " " + users[0].shotRadius);
+                    segmentsSet.Shot(x, y, users[0].shotRadius);
+                    io.emit('infoUpdate', {
+                        segments: segmentsSet.GetMaze(),
+                        shotPosition: {
+                            x: x,
+                            y: y,
+                            r: users[0].shotRadius
+                        }
+                    });
+                };
+                botsList.forEach(function (bot) {
+                    var CloseUsers = usersSet.GetClosePlayersList(bot.GetId(), segmentsSet);
+                    CloseUsers = CloseUsers.map(function (user) {
+                        return users.filter(function (fullUser) {
+                            return user.groupId == fullUser.groupId;
+                        })[0];
+                    });
+                    var FarUsers = usersSet.GetFarPlayersList(bot.GetId());
+                    FarUsers = FarUsers.map(function (user) {
+                        var obj = JSON.parse(JSON.stringify(users.filter(function (fullUser) {
+                            return user.groupId == fullUser.groupId;
+                        })[0]));
+                        obj.angleDeg = user.angleDeg;
+                        return obj;
+                    });
+                    bot.Iterate(
+                        usersSet.UserById(bot.GetId()),
+                        CloseUsers,
+                        FarUsers,
+                        segmentsSet,
+                        shot
+                    );
                 });
-            };
-            botsList.forEach(function(bot) {
-                var CloseUsers = usersSet.GetClosePlayersList(bot.GetId(), segmentsSet);
-                CloseUsers = CloseUsers.map(function(user) {
-                    return users.filter(function(fullUser) {
-                        return user.groupId == fullUser.groupId;
-                    })[0];
-                });
-                var FarUsers = usersSet.GetFarPlayersList(bot.GetId());
-                FarUsers = FarUsers.map(function(user) {
-                    var obj = JSON.parse(JSON.stringify(users.filter(function(fullUser) {
-                        return user.groupId == fullUser.groupId;
-                    })[0]));
-                    obj.angleDeg = user.angleDeg;
-                    return obj;
-                });
-                bot.Iterate(
-                    usersSet.UserById(bot.GetId()),
-                    CloseUsers,
-                    FarUsers,
-                    segmentsSet,
-                    shot
-                );
-            });
 
-            users.forEach(function(user) {
-                if (user.playerType == null) {
-                    return;
-                }
-
-                var coof = 1;
-                if (user.speedUpOn && user.boostSize > 0.05) {
-                    user.boostSize -= 0.05;
-                    coof = user.speedUpMult;
-                }
-                var addX = 0;
-                var addY = 0;
-                var uDist = user.dx * user.dx + user.dy * user.dy;
-                if (uDist > user.radius * user.radius) {
-                    addX = user.dx / Math.sqrt(uDist) * user.speed * 0.05 * coof;
-                    addY = user.dy / Math.sqrt(uDist) * user.speed * 0.05 * coof;
-                }
-
-                segmentsSet.TryMoving(user, addX, 0);
-                segmentsSet.TryMoving(user, 0, addY);
-
-                user.boostSize = Math.min(user.boostSize + user.boostIncPerSec * 0.05, user.maxBoost);
-            });
-            var teamsChanged = false;
-            users.forEach(function(user1) {
-                if (user1.playerType == null) {
-                    return;
-                }
-                users.forEach(function(user2) {
-                    if (user2.playerType == null) {
+                users.forEach(function (user) {
+                    if (user.playerType == null) {
                         return;
                     }
-                    if ((user1.team + 2) % 3 == user2.team) {
-                        var dist = Math.pow(
-                            (user1.x - user2.x) * (user1.x - user2.x)+
-                            (user1.y - user2.y) * (user1.y - user2.y),
-                            0.5);
-                        if (dist * 1.2 <= user1.innerRadius + user2.innerRadius) {
-                            teamsChanged = true;
-                            user2.team = user1.team;
-                            user2.boostSize = 0;
-                            var diff = GetScoreChange(user2.scorePlus);
-                            user1.scorePlus += diff;
-                            user2.scorePlus -= diff;
-                        }
+
+                    var coof = 1;
+                    if (user.speedUpOn && user.boostSize > 0.05) {
+                        user.boostSize -= 0.05;
+                        coof = user.speedUpMult;
                     }
+                    var addX = 0;
+                    var addY = 0;
+                    var uDist = user.dx * user.dx + user.dy * user.dy;
+                    if (uDist > user.radius * user.radius) {
+                        addX = user.dx / Math.sqrt(uDist) * user.speed * 0.05 * coof;
+                        addY = user.dy / Math.sqrt(uDist) * user.speed * 0.05 * coof;
+                    }
+
+                    segmentsSet.TryMoving(user, addX, 0);
+                    segmentsSet.TryMoving(user, 0, addY);
+
+                    user.boostSize = Math.min(user.boostSize + user.boostIncPerSec * 0.05, user.maxBoost);
                 });
-            });
-            if (gameState.val == 'game') {
+                var teamsChanged = false;
+                users.forEach(function (user1) {
+                    if (user1.playerType == null) {
+                        return;
+                    }
+                    users.forEach(function (user2) {
+                        if (user2.playerType == null) {
+                            return;
+                        }
+                        if ((user1.team + 2) % 3 == user2.team) {
+                            var dist = Math.pow(
+                                (user1.x - user2.x) * (user1.x - user2.x) +
+                                (user1.y - user2.y) * (user1.y - user2.y),
+                                0.5);
+                            if (dist * 1.2 <= user1.innerRadius + user2.innerRadius) {
+                                teamsChanged = true;
+                                user2.team = user1.team;
+                                user2.boostSize = 0;
+                                var diff = GetScoreChange(user2.scorePlus);
+                                user1.scorePlus += diff;
+                                user2.scorePlus -= diff;
+                            }
+                        }
+                    });
+                });
                 gameState.timeRemaining -= 0.05;
                 if (gameState.timeRemaining <= 0) {
                     CheckEnd(true);
                 }
-            }
-            if (teamsChanged) {
-                io.emit('infoUpdate', {
-                    usersInfoList: usersSet.GetInfoList()
-                });
-                CheckEnd();
+                if (teamsChanged) {
+                    io.emit('infoUpdate', {
+                        usersInfoList: usersSet.GetInfoList()
+                    });
+                    CheckEnd();
+                }
             }
         }, 50);
     }
