@@ -21,12 +21,12 @@ app.use('/bower_components',  express.static(__dirname + '/bower_components'));
 var maxPermittedAmount = 30;
 var addresses = /*[{
         host: 'localhost',
-        port: 8125,
-        val: 'ws://localhost:8125',
+        port: 8080,
+        val: 'ws://localhost:8080',
         amount: 0
     }
-];*/
-
+];
+*/
     [{
         host: '37.139.26.152',
         port: 8126,
@@ -76,7 +76,7 @@ app.get('/rooms/free', function(req, res) {
     }
 });
 
-//require('./routes/roomServer.js').Start(server, app);
+require('./routes/roomServer.js').Start(server, app);
 
 var createRequest = require('./createRequest.js');
 setInterval(function() {

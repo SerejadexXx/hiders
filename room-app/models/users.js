@@ -89,9 +89,9 @@ module.exports = {
             });
             var team = 0;
             quantity.forEach(function(val, key) {
-               if (quantity[team] > val) {
-                   team = key;
-               }
+                if (quantity[team] > val) {
+                    team = key;
+                }
             });
             return team;
         };
@@ -99,8 +99,8 @@ module.exports = {
         var GetSmallestGroupId = function() {
             var groupId = 0;
             while (users.filter(function(user){
-                    return user.groupId == groupId;
-                }).length > 0) {
+                return user.groupId == groupId;
+            }).length > 0) {
                 groupId++;
             }
             return groupId;
@@ -161,7 +161,7 @@ module.exports = {
         };
         this.RemoveUser = function(id) {
             users = users.filter(function(user) {
-               return user.id != id;
+                return user.id != id;
             });
         };
         this.GetActive = function() {
@@ -209,9 +209,11 @@ module.exports = {
             var user = users.filter(function(user) {
                 return user.id == id;
             })[0];
-            var startPoint = GetStartPoint(segmentsSet, user.team);
-            user.x = startPoint.x;
-            user.y = startPoint.y;
+            if (user) {
+                var startPoint = GetStartPoint(segmentsSet, user.team);
+                user.x = startPoint.x;
+                user.y = startPoint.y;
+            }
         };
 
         var CheckVisibility = function(user1, user2, segmentsSet) {
@@ -347,7 +349,7 @@ module.exports = {
                     ((user.x - curUser.x) * (user.x - curUser.x) +
                     (user.y - curUser.y) * (user.y - curUser.y) <= user.visionSize * user.visionSize
                     && CheckVisibility(user, curUser, segmentsSet))
-                    //!segmentsSet.Intersects(user.x, user.y, curUser.x, curUser.y))
+                //!segmentsSet.Intersects(user.x, user.y, curUser.x, curUser.y))
                 ) {
                     rez.push({
                         x: curUser.x,

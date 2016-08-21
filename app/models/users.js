@@ -209,9 +209,11 @@ module.exports = {
             var user = users.filter(function(user) {
                 return user.id == id;
             })[0];
-            var startPoint = GetStartPoint(segmentsSet, user.team);
-            user.x = startPoint.x;
-            user.y = startPoint.y;
+            if (user) {
+                var startPoint = GetStartPoint(segmentsSet, user.team);
+                user.x = startPoint.x;
+                user.y = startPoint.y;
+            }
         };
 
         var CheckVisibility = function(user1, user2, segmentsSet) {

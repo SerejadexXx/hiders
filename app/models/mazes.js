@@ -17,7 +17,7 @@ module.exports = {
         this.Width = Width;
         this.Height = Height;
 
-        var IntersectsIntervals = function(a, b, c, d) {
+        var Intersects = function(a, b, c, d) {
             var areaCalc = function(a, b, c) {
                 return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
             };
@@ -31,7 +31,6 @@ module.exports = {
                     && areaCalc(a,b,c) * areaCalc(a,b,d) <= 0
                     && areaCalc(c,d,a) * areaCalc(c,d,b) <= 0;
         };
-        this.IntersectsIntervals = IntersectsIntervals;
 
         var AddSegment = function(p1, p2) {
             if (p1.x > p2.x) {
@@ -64,7 +63,7 @@ module.exports = {
         };
 
         this.Generate = function() {
-            segments = [];
+            segments
             // sides begin
             AddSegment(
                 new Point(0, 0),
@@ -408,7 +407,7 @@ module.exports = {
                 return false;
             }
             segments.forEach(function(segment) {
-                if (!found && IntersectsIntervals(segment.p1, segment.p2, {x: x1, y: y1}, {x: x2, y: y2})) {
+                if (!found && Intersects(segment.p1, segment.p2, {x: x1, y: y1}, {x: x2, y: y2})) {
                     found = true;
                     return;
                 }

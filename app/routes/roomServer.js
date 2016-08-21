@@ -1,6 +1,7 @@
 var sockets = require('socket.io');
 var users = require('./../models/users.js');
 var mazes = require('./../models/mazes.js');
+var bots = require('./../models/bots.js');
 
 module.exports = {
     Start: function(http, app) {
@@ -74,6 +75,11 @@ module.exports = {
                 });
                 usersSet.UpdateData();
                 segmentsSet.Generate();
+                botsList.forEach(function(bot) {
+                    var id = bot.GetId();
+                    usersSet.SetPlayerType(id, 1);
+                    usersSet.UpdatePosition(id, segmentsSet);
+                });
                 roundId++;
                 gameState.timeRemaining = gameLength;
                 gameState.val = 'waiting';
@@ -86,11 +92,26 @@ module.exports = {
                 });
                 usersSet.UpdateData();
                 segmentsSet.Generate();
+                botsList.forEach(function(bot) {
+                    var id = bot.GetId();
+                    usersSet.SetPlayerType(id, 1);
+                    usersSet.UpdatePosition(id, segmentsSet);
+                });
                 roundId++;
                 gameState.timeRemaining = gameLength;
                 gameState.val = 'waiting';
             }
         };
+
+        var botsList = [];
+        var botsNames = ['Valera', 'Misha', 'Sereja', 'Anti-M0stik', 'ZADRRR', '_Markush_', 'Haccc', 'LoveMeAsYouCan'];
+        for (var botId = 0; botId < 8; botId++) {
+            var id = '1231231231231311313jkjkdjg' + botId;
+            var added = usersSet.AddUser(id, botsNames[botId], segmentsSet);
+            botsList.push(new bots.CreateBot(id));
+            usersSet.SetPlayerType(id, 1);
+            usersSet.UpdatePosition(id, segmentsSet);
+        }
 
         io.on('connection', function(socket) {
             var id = null;
@@ -286,6 +307,42 @@ module.exports = {
 
         setInterval(function() {
             var users = usersSet.GetList();
+            var shot = function(x, y) {
+                //console.log(x + " " + y + " " + users[0].shotRadius);
+                segmentsSet.Shot(x, y, users[0].shotRadius);
+                io.emit('infoUpdate', {
+                    segments: segmentsSet.GetMaze(),
+                    shotPosition: {
+                        x: x,
+                        y: y,
+                        r: users[0].shotRadius
+                    }
+                });
+            };
+            botsList.forEach(function(bot) {
+                var CloseUsers = usersSet.GetClosePlayersList(bot.GetId(), segmentsSet);
+                CloseUsers = CloseUsers.map(function(user) {
+                    return users.filter(function(fullUser) {
+                        return user.groupId == fullUser.groupId;
+                    })[0];
+                });
+                var FarUsers = usersSet.GetFarPlayersList(bot.GetId());
+                FarUsers = FarUsers.map(function(user) {
+                    var obj = JSON.parse(JSON.stringify(users.filter(function(fullUser) {
+                        return user.groupId == fullUser.groupId;
+                    })[0]));
+                    obj.angleDeg = user.angleDeg;
+                    return obj;
+                });
+                bot.Iterate(
+                    usersSet.UserById(bot.GetId()),
+                    CloseUsers,
+                    FarUsers,
+                    segmentsSet,
+                    shot
+                );
+            });
+
             users.forEach(function(user) {
                 if (user.playerType == null) {
                     return;
@@ -294,7 +351,7 @@ module.exports = {
                 var coof = 1;
                 if (user.speedUpOn && user.boostSize > 0.05) {
                     user.boostSize -= 0.05;
-                    coof = 3;
+                    coof = user.speedUpMult;
                 }
                 var addX = 0;
                 var addY = 0;
