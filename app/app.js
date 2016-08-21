@@ -76,7 +76,7 @@ app.get('/rooms/free', function(req, res) {
     }
 });
 
-require('./routes/roomServer.js').Start(server, app);
+//require('./routes/roomServer.js').Start(server, app);
 
 var createRequest = require('./createRequest.js');
 setInterval(function() {
