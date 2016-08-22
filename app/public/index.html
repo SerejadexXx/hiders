@@ -178,15 +178,13 @@
         <div ng-show="gameState.val == 'choosePlayer' && winnerState.val == 'off'" class="preGameCover">
             <div class="container-fluid">
                 <div ng-show="playerTeamObj != null">
-                    <div class="row playerTeamWrapper">
-                        <div class="col col-xs-offset-4 col-xs-4">
-                            <h3>
-                                <span ng-style="{color: playerTeamObj.color}">{{userName}}</span>
-                                <span style="color: rgb(30, 31, 35)">, you're in</span>
-                                <span ng-style="{color: playerTeamObj.color}">{{playerTeamObj.disp}}</span>
-                                <span style="color: rgb(30, 31, 35)">team</span>
-                            </h3>
-                        </div>
+                    <div class="row playerTeamWrapper textCenter">
+                        <h3>
+                            <span ng-style="{color: playerTeamObj.color}">{{userName}}</span>,
+                            <span style="color: rgb(30, 31, 35)">you're in</span>
+                            <span ng-style="{color: playerTeamObj.color}">{{playerTeamObj.disp}}</span>
+                            <span style="color: rgb(30, 31, 35)">team</span>
+                        </h3>
                     </div>
                     <div class="row playerTypesWrapper">
                         <div ng-repeat="playerType in playerTypes"
