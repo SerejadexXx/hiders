@@ -92,6 +92,7 @@ module.controller('mainCtrl', function(
     var mousemoveEventListener;
     $scope.viewState = 'list';
     $scope.serverError = null;
+    $scope.userName = '';
     var processing = false;
     $scope.EnterRoom = function() {
         if (!processing) {
@@ -110,9 +111,10 @@ module.controller('mainCtrl', function(
             processing = true;
             $http.get('/rooms/free', {}).then(
                 function(response) {
+                    $scope.userName = ConvertName($scope.enteredName.val);
                     processing = false;
                     $scope.viewState = 'room';
-                    startGame(response.data.address, ConvertName($scope.enteredName.val));
+                    startGame(response.data.address, $scope.userName);
                 },
                 function(response) {
                     processing = false;
