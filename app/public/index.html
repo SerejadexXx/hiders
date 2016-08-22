@@ -39,6 +39,15 @@
     <script src="analytics.js"></script>
 </head>
 <body ng-app="indexApp" ng-controller="mainCtrl" style="overflow: hidden">
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.7&appId=327655160958274";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+
     <div style="position:relative;width:100%;height:100%;overflow: hidden" ng-show="showLanding">
         <ng-include src="'landing.html'"></ng-include>
     </div>
@@ -66,6 +75,9 @@
                     </div>
                     <div class="row textCenter roomEnterError">
                         {{serverError}}
+                    </div>
+                    <div class="row textCenter">
+                        <div class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button_count" data-size="large" data-mobile-iframe="true"><a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse">Share</a></div>
                     </div>
                 </div>
             </div>
