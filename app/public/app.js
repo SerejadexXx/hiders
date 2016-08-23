@@ -509,7 +509,7 @@ module.controller('mainCtrl', function(
 
         });
 
-        var drawPlayer = function (x, y, r, team, playerType, name) {
+        var drawPlayer = function (x, y, r, team, playerType, name, boost) {
             if (team == null || playerType == null) {
                 console.error('user team or playerType undefined');
                 console.log(team);
@@ -533,6 +533,16 @@ module.controller('mainCtrl', function(
             ctx.arc(x - user.x + visibleWidth / 2, y - user.y + visibleHeight / 2, r, 0, 2 * Math.PI);
             ctx.clip();
             ctx.drawImage(ImageList[team][playerType], x - user.x + visibleWidth / 2 - r, y - user.y + visibleHeight / 2 - r, 2 * r, 2 * r);
+            if (boost != null) {
+                ctx.fillStyle = 'rgba(255,165,0, 0.3)';
+
+                ctx.fillRect(
+                    x - user.x + visibleWidth / 2 - r,
+                    y - user.y + visibleHeight / 2 + r - 2 * r * boost.boostSize / boost.maxBoost,
+                    x - user.x + visibleWidth / 2 + r,
+                    y - user.y + visibleHeight / 2 + r
+                );
+            }
             ctx.restore();
 
             ctx.beginPath();
@@ -715,7 +725,11 @@ module.controller('mainCtrl', function(
                     user.radius,
                     user.team,
                     user.playerType,
-                    user.name + " (" + CalcTotalScore(user) + ")"
+                    user.name + " (" + CalcTotalScore(user) + ")",
+                    {
+                        boostSize: user.boostSize,
+                        maxBoost: user.maxBoost
+                    }
                 );
                 lastUpdateTime = Date.now();
 
