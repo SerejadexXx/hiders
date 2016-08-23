@@ -1094,9 +1094,9 @@ module.controller('rulesCtrl', function(
             lastsFor: 2000
         },
         {
-            desc: 'Catched one loses!',
+            desc: 'Catched one lose!',
             execute: function(time) {
-                drawText(300, 200, 18, 'Catched one loses points!', TeamsList[2].color);
+                drawText(300, 200, 18, 'Catched one lose points!', TeamsList[2].color);
                 drawImage(220, 100, 100, TeamsList[1].img, TeamsList[1].color);
                 drawImage(300, 100, 100, TeamsList[1].img, TeamsList[1].color);
             },

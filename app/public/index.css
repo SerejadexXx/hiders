@@ -52,7 +52,7 @@
 .mainLogoRange {
     opacity: 0;
     position: absolute;
-    top: 330px;
+    top: 340px;
     left: 50%;
     margin-left: -200px;
     -webkit-transition: opacity 200ms linear;
