@@ -40,14 +40,9 @@
 }
 
 .mainLogo {
-    margin-top: 100px;
+    margin: 100px auto 0;
     border: 3px solid grey;
     border-radius: 20px;
-}
-
-.logoFrame {
-    width: 600px;
-    height: 250px;
 }
 
 .nameInputWrapper {

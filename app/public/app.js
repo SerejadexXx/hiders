@@ -6,6 +6,73 @@ module.filter('formatSeconds', [function() {
     };
 }]);
 
+module.constant('ASSETS', {
+    playerTeams: [
+        {
+            key: 0,
+            disp: 'Scissors',
+            color: 'rgb(13, 93, 253)',
+            src: '/assets/scissors'
+        },
+        {
+            key: 1,
+            disp: 'Rocks',
+            color: 'rgb(93, 253, 13)',
+            src: '/assets/rocks'
+        },
+        {
+            key: 2,
+            disp: 'Papers',
+            color: 'rgb(253, 13, 93)',
+            src: '/assets/papers'
+        }
+    ],
+    playerTypes: [
+        {
+            key: 0,
+            disp: 'Rayer',
+            color: 'rgb(0, 200, 0)',
+            src: '_rayer.png',
+            bonus: 'Free x-Ray!'
+        },
+        {
+            key: 1,
+            disp: 'Bomber',
+            color: 'rgb(0, 191, 255)',
+            src: '_bomber.png',
+            bonus: 'Free shots!'
+        },
+        {
+            key: 2,
+            disp: 'Hider',
+            color: 'rgb(10, 11, 34)',
+            src: '_hider.png',
+            bonus: 'Hides from x-Ray!'
+        },
+        {
+            key: 3,
+            disp: 'Booster',
+            color: 'rgb(255,127,80)',
+            src: '_booster.png',
+            bonus: 'More boost!'
+        },
+        {
+            key: 4,
+            disp: 'Faster',
+            color: 'rgb(255,255,51)',
+            src: '_faster.png',
+            bonus: 'Just faster!'
+        }
+    ],
+    teamsInfoSrc: [{
+        src: '/assets/scissors_ico.png'
+    }, {
+        src: '/assets/rocks_ico.png'
+    }, {
+        src: '/assets/papers_ico.png'
+    }]
+});
+
 module.service('segmentsFunctional', function() {
     var segments = [];
     var Width = 0;
@@ -77,7 +144,9 @@ module.controller('mainCtrl', function(
     $scope,
     segmentsFunctional,
     $http,
-    $timeout
+    $timeout,
+    ASSETS,
+    $rootScope
 ) {
     $scope.showLanding = false;
     if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
@@ -91,6 +160,7 @@ module.controller('mainCtrl', function(
     var mouseupEventListener;
     var mousemoveEventListener;
     $scope.viewState = 'list';
+    $rootScope.$broadcast('startRules');
     $scope.serverError = null;
     $scope.userName = '';
     var processing = false;
@@ -134,66 +204,11 @@ module.controller('mainCtrl', function(
     var kickTimeout = null;
     var startGame = function(address, userName) {
         $scope.shouldSelect = true;
-        $scope.playerTeams = [
-            {
-                key: 0,
-                disp: 'Scissors',
-                color: 'rgb(13, 93, 253)',
-                src: '/assets/scissors'
-            },
-            {
-                key: 1,
-                disp: 'Rocks',
-                color: 'rgb(93, 253, 13)',
-                src: '/assets/rocks'
-            },
-            {
-                key: 2,
-                disp: 'Papers',
-                color: 'rgb(253, 13, 93)',
-                src: '/assets/papers'
-            }
-        ];
+        $scope.playerTeams = JSON.parse(JSON.stringify(ASSETS.playerTeams));
         $scope.playerTypeObj = null;
         $scope.playerTeam = null;
         $scope.playerTeamObj = null;
-        $scope.playerTypes = [
-            {
-                key: 0,
-                disp: 'Rayer',
-                color: 'rgb(0, 200, 0)',
-                src: '_rayer.png',
-                bonus: 'Free x-Ray!'
-            },
-            {
-                key: 1,
-                disp: 'Bomber',
-                color: 'rgb(0, 191, 255)',
-                src: '_bomber.png',
-                bonus: 'Free shots!'
-            },
-            {
-                key: 2,
-                disp: 'Hider',
-                color: 'rgb(10, 11, 34)',
-                src: '_hider.png',
-                bonus: 'Hides from x-Ray!'
-            },
-            {
-                key: 3,
-                disp: 'Booster',
-                color: 'rgb(255,127,80)',
-                src: '_booster.png',
-                bonus: 'More boost!'
-            },
-            {
-                key: 4,
-                disp: 'Faster',
-                color: 'rgb(255,255,51)',
-                src: '_faster.png',
-                bonus: 'Just faster!'
-            }
-        ];
+        $scope.playerTypes = JSON.parse(JSON.stringify(ASSETS.playerTypes));
         var ImageList = [];
         $scope.playerTeams.forEach(function (team) {
             var ImagePlayerTypesList = [];
@@ -213,22 +228,11 @@ module.controller('mainCtrl', function(
         $scope.SelectPlayerType = function (key) {
             $scope.selectedPlayerType = key;
         };
-        $scope.teamsInfo = [{
-            size: 0,
-            src: '/assets/scissors_ico.png',
-            color: $scope.playerTeams[0].color,
-            disp: $scope.playerTeams[0].disp
-        }, {
-            size: 0,
-            src: '/assets/rocks_ico.png',
-            color: $scope.playerTeams[1].color,
-            disp: $scope.playerTeams[1].disp
-        }, {
-            size: 0,
-            src: '/assets/papers_ico.png',
-            color: $scope.playerTeams[2].color,
-            disp: $scope.playerTeams[2].disp
-        }];
+        $scope.teamsInfo = JSON.parse(JSON.stringify(ASSETS.teamsInfoSrc));
+        $scope.teamsInfo.forEach(function(team, key) {
+            team.color = $scope.playerTeams[key].color;
+            team.disp = $scope.playerTeams[key].disp;
+        });
         var UpdateTeamsSizes = function (usersList) {
             $scope.teamsInfo[0].size = 0;
             $scope.teamsInfo[1].size = 0;
@@ -272,15 +276,16 @@ module.controller('mainCtrl', function(
         socket.on('disconnect', function() {
             if($scope.$$phase) {
                 $scope.viewState = 'list';
+                $rootScope.$broadcast('startRules');
             } else {
                 $scope.$apply(function () {
                     $scope.viewState = 'list';
+                    $rootScope.$broadcast('startRules');
                 });
             }
         });
         $scope.LeaveRoom = function() {
             socket.disconnect();
-           // $scope.viewState = 'list';
         };
         $scope.PlayerTypeSelected = function () {
             socket.emit('playerType', {
@@ -818,4 +823,697 @@ module.controller('mainCtrl', function(
         };
         canvas.addEventListener('mousemove', mousemoveEventListener);
     }
+});
+
+module.controller('rulesCtrl', function(
+    $scope,
+    ASSETS
+) {
+    var canvas = document.getElementById('mainLogo');
+    var ctx = canvas.getContext('2d');
+    var curTime = 4500;
+
+    var logo = new Image();
+    logo.src = '/assets/logo.png';
+    var ImageList = [];
+    ASSETS.playerTeams.forEach(function (team) {
+        var ImagePlayerTypesList = [];
+        ASSETS.playerTypes.forEach(function (playerType) {
+            var newImage = new Image();
+            newImage.src = team.src + playerType.src;
+
+            ImagePlayerTypesList.push({
+                img: newImage,
+                color: playerType.color,
+                disp: playerType.disp
+            });
+        });
+        ImageList.push({
+            imgs: ImagePlayerTypesList,
+            color: team.color,
+            disp: team.disp
+        });
+    });
+
+    var TeamsList = [];
+    ASSETS.teamsInfoSrc.forEach(function(team, key) {
+        var newImage = new Image();
+        newImage.src = team.src;
+
+        TeamsList.push({
+            img: newImage,
+            color: ImageList[key].color,
+            disp: ImageList[key].disp
+        });
+    });
+
+    var drawImage = function(x, y, size, img, borderColor) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(x, y, size / 2, 0, 2 * Math.PI);
+        ctx.clip();
+        ctx.drawImage(img, x - size / 2, y - size / 2, size, size);
+        ctx.restore();
+        ctx.strokeStyle = borderColor;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(x, y, size / 2, 0, 2 * Math.PI);
+        ctx.stroke();
+    };
+
+    var drawText = function(x, y, size, text, color, align) {
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1;
+        ctx.font = size + 'px Raleway';
+        ctx.textAlign="center";
+        if (align) {
+            ctx.textAlign = align;
+        }
+        ctx.strokeText(text, x, y);
+    };
+
+    var drawPointer = function(x1, y1, x2, y2, side) {
+        ctx.beginPath();
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = 5;
+        ctx.moveTo(x2, y2);
+        var dx = x2 - x1;
+        var dy = y2 - y1;
+        var d = Math.pow(dx * dx + dy * dy, 0.5);
+        var angle = Math.atan2(dy, dx);
+        ctx.lineTo(Math.round(x1 - Math.cos(angle) * 2), Math.round(y1 - Math.sin(angle) * 2));
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(Math.round(x1 + Math.cos(angle + 0.5) * side), Math.round(y1 + Math.sin(angle + 0.5) * side));
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(Math.round(x1 + Math.cos(angle - 0.5) * side), Math.round(y1 + Math.sin(angle - 0.5) * side));
+        ctx.stroke();
+    };
+    curTime = 47500;
+    var moments = [
+        {
+            desc: 'images appears',
+            execute: function(time) {
+                TeamsList.forEach(function(team, key) {
+                    drawImage(130 + key * 170, 100, 100, team.img, team.color);
+                    //drawText(130 + key * 170, 200, 18, team.disp, team.color);
+                });
+
+                ctx.fillStyle = 'rgba(255, 255, 255, ' + (1 - time / 1000) + ')';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            },
+            startAt: 0
+        },
+        {
+            desc: 'text appears',
+            execute: function(time) {
+                TeamsList.forEach(function(team, key) {
+                    drawImage(130 + key * 170, 100, 100, team.img, team.color);
+                    drawText(130 + key * 170, 200, 18, team.disp, team.color);
+                });
+
+                ctx.fillStyle = 'rgba(255, 255, 255, ' + (1 - time / 1000) + ')';
+                ctx.fillRect(0, 185, canvas.width, canvas.height);
+            },
+            startAt: 1000
+        },
+        {
+            desc: 'stable',
+            execute: function(time) {
+                TeamsList.forEach(function(team, key) {
+                    drawImage(130 + key * 170, 100, 100, team.img, team.color);
+                    drawText(130 + key * 170, 200, 18, team.disp, team.color);
+                });
+            },
+            startAt: 1500
+        },
+        {
+            desc: 'text disappears',
+            execute: function(time) {
+                TeamsList.forEach(function(team, key) {
+                    drawImage(130 + key * 170, 100, 100, team.img, team.color);
+                    drawText(130 + key * 170, 200, 18, team.disp, team.color);
+                });
+
+                ctx.fillStyle = 'rgba(255, 255, 255, ' + (time / 1000) + ')';
+                ctx.fillRect(0, 185, canvas.width, canvas.height);
+            },
+            startAt: 2500
+        },
+        {
+            desc: 'move to triangle positions',
+            execute: function(time) {
+                drawImage(130 + time / 30, 100 - time / 60, 100, TeamsList[0].img, TeamsList[0].color);
+                drawImage(130 + 1 * 170, 100 + time / 31, 100, TeamsList[1].img, TeamsList[1].color);
+                drawImage(130 + 2 * 170 - time / 30, 100 - time / 60, 100, TeamsList[2].img, TeamsList[2].color);
+            },
+            startAt: 3500
+        },
+        {
+            execute: function(time) {
+                drawPointer(240, 110, 260, 130, 15);
+                drawPointer(340, 65, 260, 65, 15);
+                drawPointer(340, 130, 360, 110, 15);
+                drawText(80, 50, 15, 'Scissors hits papers', 'black');
+                drawText(440, 150, 15, 'Papers hits rocks', 'black');
+                drawText(140, 150, 15, 'Rocks hits scissors', 'black');
+                var trans;
+                if (time < 1000) {
+                    trans = 1 - time / 1000;
+                } else
+                if (time < 2000) {
+                    trans = 0;
+                } else {
+                    trans = (time - 2000) / 1000;
+                }
+                ctx.fillStyle = 'rgba(255, 255, 255, ' + trans + ')';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                time = 2200;
+                drawImage(130 + time / 30, 100 - time / 60, 100, TeamsList[0].img, TeamsList[0].color);
+                drawImage(130 + 1 * 170, 100 + time / 31, 100, TeamsList[1].img, TeamsList[1].color);
+                drawImage(130 + 2 * 170 - time / 30, 100 - time / 60, 100, TeamsList[2].img, TeamsList[2].color);
+            },
+            startAt: 5700
+        },
+        {
+            desc: 'move back to linear positions',
+            execute: function(time) {
+                time = 2200 - time;
+                drawImage(130 + time / 30, 100 - time / 60, 100, TeamsList[0].img, TeamsList[0].color);
+                drawImage(130 + 1 * 170, 100 + time / 31, 100, TeamsList[1].img, TeamsList[1].color);
+                drawImage(130 + 2 * 170 - time / 30, 100 - time / 60, 100, TeamsList[2].img, TeamsList[2].color);
+            },
+            startAt: 8700
+        },
+        {
+            desc: 'right circle disappears, second on its position',
+            execute: function(time) {
+                drawText(300, 200, 18, 'Catch enemy to hit!', TeamsList[2].color);
+                var trans = 1 - time / 1000;
+                ctx.fillStyle = 'rgba(255, 255, 255, ' + trans + ')';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                drawImage(130 + time * (220 - 130) / 1000, 100, 100, TeamsList[0].img, TeamsList[0].color);
+                drawImage(130 + 1 * 170 + time * (380 - 300) / 1000, 100, 100, TeamsList[1].img, TeamsList[1].color);
+                drawImage(130 + 2 * 170 + time / 3, 100, 100, TeamsList[2].img, TeamsList[2].color);
+            },
+            startAt: 10900
+        },
+        {
+            desc: 'second catch first',
+            execute: function(time) {
+                drawText(300, 200, 18, 'Catch enemy to hit!', TeamsList[2].color);
+                drawImage(220, 100, 100, TeamsList[0].img, TeamsList[0].color);
+                drawImage(380 - time * 80 / 1000, 100, 100, TeamsList[1].img, TeamsList[1].color);
+            },
+            startAt: 11900
+        },
+        {
+            desc: 'After hit enemy comes to your team...',
+            execute: function(time) {
+                drawText(300, 200, 18, 'After hit enemy comes to your team...', TeamsList[1].color);
+                drawImage(220, 100, 100, TeamsList[1].img, TeamsList[1].color);
+                drawImage(300, 100, 100, TeamsList[1].img, TeamsList[1].color);
+            },
+            startAt: 12900
+        },
+        {
+            desc: 'You earn some points!',
+            execute: function(time) {
+                drawText(300, 200, 18, 'You earn some points!', TeamsList[1].color);
+                drawImage(220, 100, 100, TeamsList[1].img, TeamsList[1].color);
+                drawImage(300, 100, 100, TeamsList[1].img, TeamsList[1].color);
+            },
+            startAt: 14900
+        },
+        {
+            desc: 'Catched one lose!',
+            execute: function(time) {
+                drawText(300, 200, 18, 'Catched one lose points!', TeamsList[2].color);
+                drawImage(220, 100, 100, TeamsList[1].img, TeamsList[1].color);
+                drawImage(300, 100, 100, TeamsList[1].img, TeamsList[1].color);
+            },
+            startAt: 16900
+        },
+        {
+            desc: 'More points he had - more you earned!',
+            execute: function(time) {
+                drawText(300, 200, 18, 'More points he had, more you earned!', TeamsList[1].color);
+                drawImage(220, 100, 100, TeamsList[1].img, TeamsList[1].color);
+                drawImage(300, 100, 100, TeamsList[1].img, TeamsList[1].color);
+            },
+            startAt: 18900
+        },
+        {
+            desc: 'More points he had - more you earned! - disappears',
+            execute: function(time) {
+                drawText(300, 200, 18, 'More points he had, more you earned!', TeamsList[1].color);
+                drawImage(220, 100, 100, TeamsList[1].img, TeamsList[1].color);
+                drawImage(300, 100, 100, TeamsList[1].img, TeamsList[1].color);
+                var trans = time / 1000;
+                ctx.fillStyle = 'rgba(255, 255, 255, ' + trans + ')';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            },
+            startAt: 19900
+        },
+        {
+            desc: 'Vision',
+            execute: function(time) {
+                //drawText(300, 200, 18, 'More points he had, more you earned!', TeamsList[1].color);
+                var x = 300;
+                var y = 140;
+                var grd = ctx.createRadialGradient(
+                    x, y, 0,
+                    x, y, 150
+                );
+                grd.addColorStop(0, 'rgba(0, 255, 0, ' + (Math.random() / 50 + 1 / 8) + ')');
+                grd.addColorStop(1, "white");
+
+                ctx.beginPath();
+                ctx.fillStyle = grd;
+                ctx.arc(x, y, 150, 0, 2 * Math.PI);
+                ctx.fill();
+
+                drawImage(x, y, 60, TeamsList[2].img, TeamsList[2].color);
+
+                drawText(70, 50, 15, 'Light green around', 'black');
+                drawText(70, 70, 15, 'is vision!', 'black');
+
+                var trans = 1 - time / 1000;
+                ctx.fillStyle = 'rgba(255, 255, 255, ' + trans + ')';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            },
+            startAt: 20900
+        },
+        {
+            desc: 'Vision - 2',
+            execute: function(time) {
+                drawText(70, 90, 15, 'Walls blocks vision!', 'black');
+                drawText(75, 110, 15, 'Only players in vision', 'black');
+                drawText(75, 130, 15, 'are visible!', 'black');
+                var trans = 1 - time / 1000;
+                ctx.fillStyle = 'rgba(255, 255, 255, ' + trans + ')';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                //drawText(300, 200, 18, 'More points he had, more you earned!', TeamsList[1].color);
+                var x = 300;
+                var y = 140;
+                var grd = ctx.createRadialGradient(
+                    x, y, 0,
+                    x, y, 150
+                );
+                grd.addColorStop(0, 'rgba(0, 255, 0, ' + (Math.random() / 50 + 1 / 8) + ')');
+                grd.addColorStop(1, "white");
+
+                ctx.beginPath();
+                ctx.fillStyle = grd;
+                ctx.arc(x, y, 150, 0, 2 * Math.PI);
+                ctx.fill();
+
+                drawImage(x, y, 60, TeamsList[2].img, TeamsList[2].color);
+
+                drawText(70, 50, 15, 'Light green around', 'black');
+                drawText(70, 70, 15, 'is vision!', 'black');
+            },
+            startAt: 21900
+        },
+        {
+            desc: 'Vision - 3',
+            execute: function(time) {
+                drawText(505, 200, 15, 'Also you will see', 'black');
+                drawText(505, 220, 15, 'info about far players', 'black');
+                drawText(505, 240, 15, 'near border of the screen', 'black');
+                var trans = 1 - time / 1000;
+                ctx.fillStyle = 'rgba(255, 255, 255, ' + trans + ')';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                //drawText(300, 200, 18, 'More points he had, more you earned!', TeamsList[1].color);
+                var x = 300;
+                var y = 140;
+                var grd = ctx.createRadialGradient(
+                    x, y, 0,
+                    x, y, 150
+                );
+                grd.addColorStop(0, 'rgba(0, 255, 0, ' + (Math.random() / 50 + 1 / 8) + ')');
+                grd.addColorStop(1, "white");
+
+                ctx.beginPath();
+                ctx.fillStyle = grd;
+                ctx.arc(x, y, 150, 0, 2 * Math.PI);
+                ctx.fill();
+
+                drawImage(x, y, 60, TeamsList[2].img, TeamsList[2].color);
+
+                drawText(70, 50, 15, 'Light green around', 'black');
+                drawText(70, 70, 15, 'is vision!', 'black');
+                drawText(70, 90, 15, 'Walls blocks vision!', 'black');
+                drawText(75, 110, 15, 'Only players in vision', 'black');
+                drawText(75, 130, 15, 'are visible!', 'black');
+            },
+            startAt: 22900
+        },
+        {
+            desc: 'Moving',
+            execute: function(time) {
+                drawText(100, 30, 15, 'Move cursor to set direction', 'black');
+                drawText(90, 50, 15, 'You can\'t cross any wall!', 'black');
+                var trans = 1 - time / 1000;
+                ctx.fillStyle = 'rgba(255, 255, 255, ' + trans + ')';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                //drawText(300, 200, 18, 'More points he had, more you earned!', TeamsList[1].color);
+                var x = 300;
+                var y = 140;
+                var grd = ctx.createRadialGradient(
+                    x, y, 0,
+                    x, y, 150
+                );
+                grd.addColorStop(0, 'rgba(0, 255, 0, ' + (Math.random() / 50 + 1 / 8) + ')');
+                grd.addColorStop(1, "white");
+
+                ctx.beginPath();
+                ctx.fillStyle = grd;
+                ctx.arc(x, y, 150, 0, 2 * Math.PI);
+                ctx.fill();
+
+                drawImage(x, y, 60, TeamsList[1].img, TeamsList[1].color);
+            },
+            startAt: 23900
+        },
+        {
+            desc: 'Moving - 2',
+            execute: function(time) {
+                drawText(505, 30, 15, 'Click to increase speed', 'orange');
+                drawText(505, 50, 15, 'Boost is finite!', 'orange');
+                drawText(505, 70, 15, 'Don\'t waste it!', 'orange');
+
+                var trans = 1 - time / 1000;
+                ctx.fillStyle = 'rgba(255, 255, 255, ' + trans + ')';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                //drawText(300, 200, 18, 'More points he had, more you earned!', TeamsList[1].color);
+                var x = 300;
+                var y = 140;
+                var grd = ctx.createRadialGradient(
+                    x, y, 0,
+                    x, y, 150
+                );
+                grd.addColorStop(0, 'rgba(0, 255, 0, ' + (Math.random() / 50 + 1 / 8) + ')');
+                grd.addColorStop(1, "white");
+
+                ctx.beginPath();
+                ctx.fillStyle = grd;
+                ctx.arc(x, y, 150, 0, 2 * Math.PI);
+                ctx.fill();
+
+                drawText(100, 30, 15, 'Move cursor to set direction', 'black');
+                drawText(90, 50, 15, 'You can\'t cross any wall!', 'black');
+
+                drawImage(x, y, 60, TeamsList[1].img, TeamsList[1].color);
+            },
+            startAt: 24900
+        },
+        {
+            desc: 'Moving - 3',
+            execute: function(time) {
+                drawText(70, 180, 15, 'Space to', 'rgb(0, 191, 255)');
+                drawText(80, 200, 15, 'crash walls near you', 'rgb(0, 191, 255)');
+                drawText(90, 220, 15, 'Also costs some boost', 'rgb(0, 191, 255)');
+
+                var trans = 1 - time / 1000;
+                ctx.fillStyle = 'rgba(255, 255, 255, ' + trans + ')';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                //drawText(300, 200, 18, 'More points he had, more you earned!', TeamsList[1].color);
+                var x = 300;
+                var y = 140;
+                var grd = ctx.createRadialGradient(
+                    x, y, 0,
+                    x, y, 150
+                );
+                grd.addColorStop(0, 'rgba(0, 255, 0, ' + (Math.random() / 50 + 1 / 8) + ')');
+                grd.addColorStop(1, "white");
+
+                ctx.beginPath();
+                ctx.fillStyle = grd;
+                ctx.arc(x, y, 150, 0, 2 * Math.PI);
+                ctx.fill();
+
+                drawText(100, 30, 15, 'Move cursor to set direction', 'black');
+                drawText(90, 50, 15, 'You can\'t cross any wall!', 'black');
+                drawText(505, 30, 15, 'Click to increase speed', 'orange');
+                drawText(505, 50, 15, 'Boost is finite!', 'orange');
+                drawText(505, 70, 15, 'Don\'t waste it!', 'orange');
+
+                drawImage(x, y, 60, TeamsList[1].img, TeamsList[1].color);
+            },
+            startAt: 25900
+        },
+        {
+            desc: 'Moving - 3',
+            execute: function(time) {
+                drawText(505, 160, 15, 'X creates x-ray!', 'rgb(0, 200, 0)');
+                drawText(510, 180, 15, 'You can see', 'rgb(0, 200, 0)');
+                drawText(510, 200, 15, 'through walls!', 'rgb(0, 200, 0)');
+                drawText(510, 220, 15, 'Also costs some boost', 'rgb(0, 200, 0)');
+
+                var trans = 1 - time / 1000;
+                ctx.fillStyle = 'rgba(255, 255, 255, ' + trans + ')';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                //drawText(300, 200, 18, 'More points he had, more you earned!', TeamsList[1].color);
+                var x = 300;
+                var y = 140;
+                var grd = ctx.createRadialGradient(
+                    x, y, 0,
+                    x, y, 150
+                );
+                grd.addColorStop(0, 'rgba(0, 255, 0, ' + (Math.random() / 50 + 1 / 8) + ')');
+                grd.addColorStop(1, "white");
+
+                ctx.beginPath();
+                ctx.fillStyle = grd;
+                ctx.arc(x, y, 150, 0, 2 * Math.PI);
+                ctx.fill();
+
+                drawText(100, 30, 15, 'Move cursor to set direction', 'black');
+                drawText(90, 50, 15, 'You can\'t cross any wall!', 'black');
+                drawText(505, 30, 15, 'Click to increase speed', 'orange');
+                drawText(505, 50, 15, 'Boost is finite!', 'orange');
+                drawText(505, 70, 15, 'Don\'t waste it!', 'orange');
+                drawText(70, 180, 15, 'Space to', 'rgb(0, 191, 255)');
+                drawText(80, 200, 15, 'crash walls near you', 'rgb(0, 191, 255)');
+                drawText(90, 220, 15, 'Also costs some boost', 'rgb(0, 191, 255)');
+
+                drawImage(x, y, 60, TeamsList[1].img, TeamsList[1].color);
+            },
+            startAt: 26900
+        },
+        {
+            desc: 'Moving - 4',
+            execute: function(time) {
+                //drawText(300, 200, 18, 'More points he had, more you earned!', TeamsList[1].color);
+                var x = 300;
+                var y = 140;
+                var grd = ctx.createRadialGradient(
+                    x, y, 0,
+                    x, y, 150
+                );
+                grd.addColorStop(0, 'rgba(0, 255, 0, ' + (Math.random() / 50 + 1 / 8) + ')');
+                grd.addColorStop(1, "white");
+
+                ctx.beginPath();
+                ctx.fillStyle = grd;
+                ctx.arc(x, y, 150, 0, 2 * Math.PI);
+                ctx.fill();
+
+                drawText(100, 30, 15, 'Move cursor to set direction', 'black');
+                drawText(90, 50, 15, 'You can\'t cross any wall!', 'black');
+                drawText(505, 30, 15, 'Click to increase speed', 'orange');
+                drawText(505, 50, 15, 'Boost is finite!', 'orange');
+                drawText(505, 70, 15, 'Don\'t waste it!', 'orange');
+                drawText(70, 180, 15, 'Space to', 'rgb(0, 191, 255)');
+                drawText(80, 200, 15, 'crash walls near you', 'rgb(0, 191, 255)');
+                drawText(90, 220, 15, 'Also costs some boost', 'rgb(0, 191, 255)');
+                drawText(505, 160, 15, 'X creates x-ray!', 'rgb(0, 200, 0)');
+                drawText(510, 180, 15, 'You can see', 'rgb(0, 200, 0)');
+                drawText(510, 200, 15, 'through walls!', 'rgb(0, 200, 0)');
+                drawText(510, 220, 15, 'Also costs some boost', 'rgb(0, 200, 0)');
+
+                drawImage(x, y, 60, TeamsList[1].img, TeamsList[1].color);
+                var trans = time / 1000;
+                ctx.fillStyle = 'rgba(255, 255, 255, ' + trans + ')';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            },
+            startAt: 27900
+        },
+        {
+            desc: 'Types of players',
+            execute: function(time) {
+                drawText(300, 230, 18, 'There are five types of players!', 'black');
+                ImageList.forEach(function(team, teamKey) {
+                    team.imgs.forEach(function(player, playerKey) {
+                        drawImage(100 + playerKey * 100, 50 + teamKey * 60, 50, player.img, team.color);
+                    });
+                });
+            },
+            startAt: 28900
+        },
+        {
+            desc: 'Types of players: Rayer',
+            execute: function(time) {
+                var playerKey = 0;
+                ImageList.forEach(function(team, teamKey) {
+                    var player = team.imgs[playerKey];
+                    drawImage(100 + playerKey * 100, 50 + teamKey * 60, 50, player.img, team.color);
+                });
+                drawText(250, 50, 18, ImageList[0].imgs[playerKey].disp + ":", ImageList[0].imgs[playerKey].color);
+                drawText(270, 70, 18, '+ Free x-ray', ImageList[0].imgs[playerKey].color, 'left');
+                drawText(270, 90, 18, '- No shots', ImageList[0].imgs[playerKey].color, 'left');
+            },
+            startAt: 30900
+        },
+        {
+            desc: 'Types of players: Booster',
+            execute: function(time) {
+                var playerKey = 1;
+                ImageList.forEach(function(team, teamKey) {
+                    var player = team.imgs[playerKey];
+                    drawImage(100 + playerKey * 100, 50 + teamKey * 60, 50, player.img, team.color);
+                });
+                drawText(270, 50, 18, ImageList[0].imgs[playerKey].disp + ":", ImageList[0].imgs[playerKey].color);
+                drawText(290, 70, 18, '+ Free shots', ImageList[0].imgs[playerKey].color, 'left');
+                drawText(290, 90, 18, '- No x-ray', ImageList[0].imgs[playerKey].color, 'left');
+            },
+            startAt: 32900
+        },
+        {
+            desc: 'Types of players: Hider',
+            execute: function(time) {
+                var playerKey = 2;
+                ImageList.forEach(function(team, teamKey) {
+                    var player = team.imgs[playerKey];
+                    drawImage(100 + playerKey * 100, 50 + teamKey * 60, 50, player.img, team.color);
+                });
+                drawText(380, 50, 18, ImageList[0].imgs[playerKey].disp + ":", ImageList[0].imgs[playerKey].color, 'left');
+                drawText(400, 70, 18, '+ Hides from x-ray', ImageList[0].imgs[playerKey].color, 'left');
+            },
+            startAt: 34900
+        },
+        {
+            desc: 'Types of players: Booster',
+            execute: function(time) {
+                var playerKey = 3;
+                ImageList.forEach(function(team, teamKey) {
+                    var player = team.imgs[playerKey];
+                    drawImage(100 + playerKey * 100, 50 + teamKey * 60, 50, player.img, team.color);
+                });
+                drawText(40, 50, 18, ImageList[0].imgs[playerKey].disp + ":", ImageList[0].imgs[playerKey].color, 'left');
+                drawText(60, 70, 18, '+ More boost', ImageList[0].imgs[playerKey].color, 'left');
+                drawText(60, 90, 18, '- expensive shots', ImageList[0].imgs[playerKey].color, 'left');
+                drawText(60, 110, 18, '- expensive x-ray', ImageList[0].imgs[playerKey].color, 'left');
+            },
+            startAt: 36900
+        },
+        {
+            desc: 'Types of players: Fatser',
+            execute: function(time) {
+                var playerKey = 4;
+                ImageList.forEach(function(team, teamKey) {
+                    var player = team.imgs[playerKey];
+                    drawImage(100 + playerKey * 100, 50 + teamKey * 60, 50, player.img, team.color);
+                });
+                drawText(40, 50, 18, ImageList[0].imgs[playerKey].disp + ":", 'black', 'left');
+                drawText(60, 70, 18, '+ Faster speed', 'black', 'left');
+                drawText(60, 90, 18, '+ Better effect of boost', 'black', 'left');
+                drawText(60, 110, 18, '- no shots', 'black', 'left');
+                drawText(60, 130, 18, '- no x-ray', 'black', 'left');
+                drawText(60, 150, 18, '- small amount of boost', 'black', 'left');
+            },
+            startAt: 38900
+        },
+        {
+            desc: 'Round',
+            execute: function(time) {
+                drawImage(200, 70, 60, ImageList[0].imgs[0].img, ImageList[0].color);
+                drawImage(400, 90, 60, ImageList[1].imgs[2].img, ImageList[1].color);
+                drawImage(300, 130, 60, ImageList[2].imgs[3].img, ImageList[2].color);
+                drawText(300, 230, 18, 'Round lasts for 30 minutes!', 'black');
+            },
+            startAt: 40900
+        },
+        {
+            desc: 'Round - 2',
+            execute: function(time) {
+                drawImage(200, 70, 60, ImageList[0].imgs[0].img, ImageList[0].color);
+                drawImage(400, 90, 60, ImageList[1].imgs[2].img, ImageList[1].color);
+                drawImage(300, 130, 60, ImageList[2].imgs[3].img, ImageList[2].color);
+                drawText(300, 210, 18, 'After some team is empty', 'black');
+                drawText(300, 230, 18, 'players will be reselected by teams', 'black');
+            },
+            startAt: 42900
+        },
+        {
+            desc: 'Round Winner',
+            execute: function(time) {
+                drawImage(200, 70, 60, ImageList[0].imgs[0].img, ImageList[0].color);
+                drawImage(400, 90, 60, ImageList[1].imgs[2].img, ImageList[1].color);
+                drawImage(300, 130, 60, ImageList[2].imgs[3].img, ImageList[2].color);
+                drawText(300, 230, 18, 'Winner is player with maximal score after the end of the round!', 'black');
+            },
+            startAt: 44900
+        },
+        {
+            desc: 'Enjoy!',
+            execute: function(time) {
+                drawText(300, 150, 20, 'Enjoy! :)', 'black');
+            },
+            startAt: 46900
+        },
+        {
+            desc: 'Enjoy! - 2',
+            execute: function(time) {
+                drawText(300, 150, 20, 'Enjoy! :)', 'black');
+                var trans = time / 1000;
+                ctx.fillStyle = 'rgba(255, 255, 255, ' + trans + ')';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            },
+            startAt: 47900
+        },
+        {
+            desc: 'Final',
+            execute: function(time) {
+                ctx.drawImage(logo, 0, 0, canvas.width, canvas.height);
+                var trans = 1 - time / 1000;
+                if (trans > 0) {
+                    ctx.fillStyle = 'rgba(255, 255, 255, ' + trans + ')';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                }
+            },
+            startAt: 48900
+        },
+        {
+            startAt: 100000000000000
+        }
+    ];
+
+    $scope.$on('startRules', function() {
+        curTime = 0;
+    });
+
+    var Draw = function() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        for (var it = 0; it < moments.length; it++) {
+            if (moments[it + 1].startAt > curTime) {
+                moments[it].execute(curTime - moments[it].startAt);
+                break;
+            }
+        }
+    };
+
+    setInterval(function() {
+        curTime += 50;
+        Draw();
+    }, 50);
 });
