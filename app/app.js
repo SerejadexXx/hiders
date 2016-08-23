@@ -22,7 +22,7 @@ var maxPermittedAmount = 30;
 
 var addresses;
 
-if (0) {
+if (1) {
     addresses = [{
         host: 'localhost',
         port: 8126,

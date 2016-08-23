@@ -287,6 +287,9 @@ module.controller('mainCtrl', function(
         $scope.LeaveRoom = function() {
             socket.disconnect();
         };
+        $scope.BackToGame = function() {
+            $scope.winnerState.val = 'off';
+        };
         $scope.PlayerTypeSelected = function () {
             socket.emit('playerType', {
                 playerType: $scope.selectedPlayerType
@@ -418,6 +421,12 @@ module.controller('mainCtrl', function(
 
             if (data.winnerTeam != null) {
                 $scope.$apply(function () {
+                    if (data.showTopScores) {
+                        $scope.winnerState.winnerList = JSON.parse(JSON.stringify($scope.topScores));
+                        $scope.winnerState.user = JSON.parse(JSON.stringify(user));
+                    } else {
+                        $scope.winnerState.winnerList = null;
+                    }
                     $scope.winnerState.val = 'on';
                     $scope.winnerState.winnerTeam = data.winnerTeam;
                     //console.log($scope.winnerTeam);
@@ -488,11 +497,14 @@ module.controller('mainCtrl', function(
                         height: 80
                     }];
                 });
-                setTimeout(function () {
-                    $scope.$apply(function () {
-                        $scope.winnerState.val = 'off';
-                    });
-                }, 2000);
+                //console.log($scope.winnerState.winnerList);
+                if ($scope.winnerState.winnerList == null) {
+                    setTimeout(function () {
+                        $scope.$apply(function () {
+                            $scope.winnerState.val = 'off';
+                        });
+                    }, 2000);
+                }
             }
 
         });

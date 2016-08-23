@@ -33,7 +33,7 @@ function GetRandomInt(min, max) {
 var Stats = [
     {
         xRayNeed: 0,
-        shotNeed: 3,
+        shotNeed: 4,
         boostIncPerSec: 0.15,
         maxBoost: 3,
         boostSize: 1,
@@ -41,7 +41,7 @@ var Stats = [
         speedUpMult: 3
     },
     {
-        xRayNeed: 3,
+        xRayNeed: 4,
         shotNeed: 0,
         boostIncPerSec: 0.15,
         maxBoost: 3,
@@ -445,7 +445,7 @@ module.exports = {
             });
             return leading;
         };
-        this.UpdateData = function() {
+        this.UpdateData = function(scores) {
             var teams = [
                 Math.floor(users.length / 3 + 0.001),
                 Math.floor(users.length / 3 + 0.001),
@@ -477,6 +477,10 @@ module.exports = {
                 user.dy = 0;
                 user.speedUpOn = false;
                 user.xRayOn = false;
+                if (scores) {
+                    user.scorePlus = 0;
+                    user.scoreMinus = 0;
+                }
             });
         };
     }

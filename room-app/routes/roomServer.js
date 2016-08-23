@@ -16,7 +16,7 @@ module.exports = {
         var segmentsSet = new mazes.Set();
         segmentsSet.Generate();
         var roundId = 0;
-        var gameLength = 5 * 60;
+        var gameLength = 30 * 60;
 
         var gameState = {
             val: 'waiting',
@@ -81,16 +81,17 @@ module.exports = {
                     usersSet.UpdatePosition(id, segmentsSet);
                 });
                 roundId++;
-                gameState.timeRemaining = gameLength;
+                //gameState.timeRemaining = gameLength;
                 gameState.val = 'waiting';
                 return;
             }
             if (forced) {
                 winner = usersSet.GetLeadingTeam();
                 io.emit('infoUpdate', {
-                    winnerTeam: winner
+                    winnerTeam: winner,
+                    showTopScores: true
                 });
-                usersSet.UpdateData();
+                usersSet.UpdateData(true);
                 segmentsSet.Generate();
                 botsList.forEach(function(bot) {
                     var id = bot.GetId();
