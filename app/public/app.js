@@ -908,7 +908,7 @@ module.controller('rulesCtrl', function(
         ctx.lineTo(Math.round(x1 + Math.cos(angle - 0.5) * side), Math.round(y1 + Math.sin(angle - 0.5) * side));
         ctx.stroke();
     };
-    curTime = 47500;
+    //curTime = 47500;
     var moments = [
         {
             desc: 'images appears',
