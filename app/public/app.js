@@ -831,7 +831,7 @@ module.controller('rulesCtrl', function(
 ) {
     var canvas = document.getElementById('mainLogo');
     var ctx = canvas.getContext('2d');
-    var curTime = 4500;
+    var curTime = 0;
 
     var logo = new Image();
     logo.src = '/assets/logo.png';
