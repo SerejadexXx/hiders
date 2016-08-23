@@ -923,6 +923,43 @@ module.controller('rulesCtrl', function(
     //curTime = 47500;
     var moments = [
         {
+            desc: 'here are rule',
+            execute: function(time) {
+                drawText(300, 120, 20, 'Here are rules', 'orange');
+                ctx.fillStyle = 'rgba(255, 255, 255, ' + (1 - time / 1000) + ')';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            },
+            lastsFor: 2000
+        },
+        {
+            desc: 'it is just N seconds',
+            execute: function(time) {
+                drawText(300, 120, 20, 'Here are rules', 'orange');
+                drawText(300, 160, 18, 'It will take just one minute...');
+                ctx.fillStyle = 'rgba(255, 255, 255, ' + (1 - time / 1000) + ')';
+                ctx.fillRect(0, 145, canvas.width, canvas.height);
+            },
+            lastsFor: 2000
+        },
+        {
+            desc: 'it is just N seconds - 2',
+            execute: function(time) {
+                drawText(300, 120, 20, 'Here are rules', 'orange');
+                drawText(300, 160, 18, 'It will take just one minute...');
+            },
+            lastsFor: 500
+        },
+        {
+            desc: 'it is just N seconds',
+            execute: function(time) {
+                drawText(300, 120, 20, 'Here are rules', 'orange');
+                drawText(300, 160, 18, 'It will take just one minute...');
+                ctx.fillStyle = 'rgba(255, 255, 255, ' + (time / 1000) + ')';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            },
+            lastsFor: 1000
+        },
+        {
             desc: 'images appears',
             execute: function(time) {
                 TeamsList.forEach(function(team, key) {
@@ -933,7 +970,7 @@ module.controller('rulesCtrl', function(
                 ctx.fillStyle = 'rgba(255, 255, 255, ' + (1 - time / 1000) + ')';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
             },
-            startAt: 0
+            lastsFor: 1000
         },
         {
             desc: 'text appears',
@@ -946,7 +983,7 @@ module.controller('rulesCtrl', function(
                 ctx.fillStyle = 'rgba(255, 255, 255, ' + (1 - time / 1000) + ')';
                 ctx.fillRect(0, 185, canvas.width, canvas.height);
             },
-            startAt: 1000
+            lastsFor: 500
         },
         {
             desc: 'stable',
@@ -956,7 +993,7 @@ module.controller('rulesCtrl', function(
                     drawText(130 + key * 170, 200, 18, team.disp, team.color);
                 });
             },
-            startAt: 1500
+            lastsFor: 1000
         },
         {
             desc: 'text disappears',
@@ -969,7 +1006,7 @@ module.controller('rulesCtrl', function(
                 ctx.fillStyle = 'rgba(255, 255, 255, ' + (time / 1000) + ')';
                 ctx.fillRect(0, 185, canvas.width, canvas.height);
             },
-            startAt: 2500
+            lastsFor: 1000
         },
         {
             desc: 'move to triangle positions',
@@ -978,7 +1015,7 @@ module.controller('rulesCtrl', function(
                 drawImage(130 + 1 * 170, 100 + time / 31, 100, TeamsList[1].img, TeamsList[1].color);
                 drawImage(130 + 2 * 170 - time / 30, 100 - time / 60, 100, TeamsList[2].img, TeamsList[2].color);
             },
-            startAt: 3500
+            lastsFor: 2200
         },
         {
             execute: function(time) {
@@ -1004,7 +1041,7 @@ module.controller('rulesCtrl', function(
                 drawImage(130 + 1 * 170, 100 + time / 31, 100, TeamsList[1].img, TeamsList[1].color);
                 drawImage(130 + 2 * 170 - time / 30, 100 - time / 60, 100, TeamsList[2].img, TeamsList[2].color);
             },
-            startAt: 5700
+            lastsFor: 3000
         },
         {
             desc: 'move back to linear positions',
@@ -1014,7 +1051,7 @@ module.controller('rulesCtrl', function(
                 drawImage(130 + 1 * 170, 100 + time / 31, 100, TeamsList[1].img, TeamsList[1].color);
                 drawImage(130 + 2 * 170 - time / 30, 100 - time / 60, 100, TeamsList[2].img, TeamsList[2].color);
             },
-            startAt: 8700
+            lastsFor: 2200
         },
         {
             desc: 'right circle disappears, second on its position',
@@ -1027,7 +1064,7 @@ module.controller('rulesCtrl', function(
                 drawImage(130 + 1 * 170 + time * (380 - 300) / 1000, 100, 100, TeamsList[1].img, TeamsList[1].color);
                 drawImage(130 + 2 * 170 + time / 3, 100, 100, TeamsList[2].img, TeamsList[2].color);
             },
-            startAt: 10900
+            lastsFor: 1000
         },
         {
             desc: 'second catch first',
@@ -1036,7 +1073,7 @@ module.controller('rulesCtrl', function(
                 drawImage(220, 100, 100, TeamsList[0].img, TeamsList[0].color);
                 drawImage(380 - time * 80 / 1000, 100, 100, TeamsList[1].img, TeamsList[1].color);
             },
-            startAt: 11900
+            lastsFor: 1000
         },
         {
             desc: 'After hit enemy comes to your team...',
@@ -1045,7 +1082,7 @@ module.controller('rulesCtrl', function(
                 drawImage(220, 100, 100, TeamsList[1].img, TeamsList[1].color);
                 drawImage(300, 100, 100, TeamsList[1].img, TeamsList[1].color);
             },
-            startAt: 12900
+            lastsFor: 2000
         },
         {
             desc: 'You earn some points!',
@@ -1054,37 +1091,37 @@ module.controller('rulesCtrl', function(
                 drawImage(220, 100, 100, TeamsList[1].img, TeamsList[1].color);
                 drawImage(300, 100, 100, TeamsList[1].img, TeamsList[1].color);
             },
-            startAt: 14900
+            lastsFor: 2000
         },
         {
-            desc: 'Catched one lose!',
+            desc: 'Catched one loses!',
             execute: function(time) {
-                drawText(300, 200, 18, 'Catched one lose points!', TeamsList[2].color);
+                drawText(300, 200, 18, 'Catched one loses points!', TeamsList[2].color);
                 drawImage(220, 100, 100, TeamsList[1].img, TeamsList[1].color);
                 drawImage(300, 100, 100, TeamsList[1].img, TeamsList[1].color);
             },
-            startAt: 16900
+            lastsFor: 2000
         },
         {
             desc: 'More points he had - more you earned!',
             execute: function(time) {
-                drawText(300, 200, 18, 'More points he had, more you earned!', TeamsList[1].color);
+                drawText(300, 200, 18, 'More points he had, more you earn!', TeamsList[1].color);
                 drawImage(220, 100, 100, TeamsList[1].img, TeamsList[1].color);
                 drawImage(300, 100, 100, TeamsList[1].img, TeamsList[1].color);
             },
-            startAt: 18900
+            lastsFor: 1000
         },
         {
             desc: 'More points he had - more you earned! - disappears',
             execute: function(time) {
-                drawText(300, 200, 18, 'More points he had, more you earned!', TeamsList[1].color);
+                drawText(300, 200, 18, 'More points he had, more you earn!', TeamsList[1].color);
                 drawImage(220, 100, 100, TeamsList[1].img, TeamsList[1].color);
                 drawImage(300, 100, 100, TeamsList[1].img, TeamsList[1].color);
                 var trans = time / 1000;
                 ctx.fillStyle = 'rgba(255, 255, 255, ' + trans + ')';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
             },
-            startAt: 19900
+            lastsFor: 1000
         },
         {
             desc: 'Vision',
@@ -1110,10 +1147,13 @@ module.controller('rulesCtrl', function(
                 drawText(70, 70, 15, 'is vision!', 'black');
 
                 var trans = 1 - time / 1000;
+                if (trans < 0) {
+                    trans = 0;
+                }
                 ctx.fillStyle = 'rgba(255, 255, 255, ' + trans + ')';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
             },
-            startAt: 20900
+            lastsFor: 2000
         },
         {
             desc: 'Vision - 2',
@@ -1122,6 +1162,9 @@ module.controller('rulesCtrl', function(
                 drawText(75, 110, 15, 'Only players in vision', 'black');
                 drawText(75, 130, 15, 'are visible!', 'black');
                 var trans = 1 - time / 1000;
+                if (trans < 0) {
+                    trans = 0;
+                }
                 ctx.fillStyle = 'rgba(255, 255, 255, ' + trans + ')';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -1145,7 +1188,7 @@ module.controller('rulesCtrl', function(
                 drawText(70, 50, 15, 'Light green around', 'black');
                 drawText(70, 70, 15, 'is vision!', 'black');
             },
-            startAt: 21900
+            lastsFor: 2000
         },
         {
             desc: 'Vision - 3',
@@ -1154,6 +1197,9 @@ module.controller('rulesCtrl', function(
                 drawText(505, 220, 15, 'info about far players', 'black');
                 drawText(505, 240, 15, 'near border of the screen', 'black');
                 var trans = 1 - time / 1000;
+                if (trans < 0) {
+                    trans = 0;
+                }
                 ctx.fillStyle = 'rgba(255, 255, 255, ' + trans + ')';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -1180,7 +1226,7 @@ module.controller('rulesCtrl', function(
                 drawText(75, 110, 15, 'Only players in vision', 'black');
                 drawText(75, 130, 15, 'are visible!', 'black');
             },
-            startAt: 22900
+            lastsFor: 2000
         },
         {
             desc: 'Moving',
@@ -1188,6 +1234,9 @@ module.controller('rulesCtrl', function(
                 drawText(100, 30, 15, 'Move cursor to set direction', 'black');
                 drawText(90, 50, 15, 'You can\'t cross any wall!', 'black');
                 var trans = 1 - time / 1000;
+                if (trans < 0) {
+                    trans = 0;
+                }
                 ctx.fillStyle = 'rgba(255, 255, 255, ' + trans + ')';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -1208,7 +1257,7 @@ module.controller('rulesCtrl', function(
 
                 drawImage(x, y, 60, TeamsList[1].img, TeamsList[1].color);
             },
-            startAt: 23900
+            lastsFor: 2000
         },
         {
             desc: 'Moving - 2',
@@ -1218,6 +1267,9 @@ module.controller('rulesCtrl', function(
                 drawText(505, 70, 15, 'Don\'t waste it!', 'orange');
 
                 var trans = 1 - time / 1000;
+                if (trans < 0) {
+                    trans = 0;
+                }
                 ctx.fillStyle = 'rgba(255, 255, 255, ' + trans + ')';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -1241,7 +1293,7 @@ module.controller('rulesCtrl', function(
 
                 drawImage(x, y, 60, TeamsList[1].img, TeamsList[1].color);
             },
-            startAt: 24900
+            lastsFor: 2000
         },
         {
             desc: 'Moving - 3',
@@ -1251,6 +1303,9 @@ module.controller('rulesCtrl', function(
                 drawText(90, 220, 15, 'Also costs some boost', 'rgb(0, 191, 255)');
 
                 var trans = 1 - time / 1000;
+                if (trans < 0) {
+                    trans = 0;
+                }
                 ctx.fillStyle = 'rgba(255, 255, 255, ' + trans + ')';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -1277,7 +1332,7 @@ module.controller('rulesCtrl', function(
 
                 drawImage(x, y, 60, TeamsList[1].img, TeamsList[1].color);
             },
-            startAt: 25900
+            lastsFor: 2000
         },
         {
             desc: 'Moving - 3',
@@ -1288,6 +1343,9 @@ module.controller('rulesCtrl', function(
                 drawText(510, 220, 15, 'Also costs some boost', 'rgb(0, 200, 0)');
 
                 var trans = 1 - time / 1000;
+                if (trans < 0) {
+                    trans = 0;
+                }
                 ctx.fillStyle = 'rgba(255, 255, 255, ' + trans + ')';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -1317,7 +1375,7 @@ module.controller('rulesCtrl', function(
 
                 drawImage(x, y, 60, TeamsList[1].img, TeamsList[1].color);
             },
-            startAt: 26900
+            lastsFor: 2000
         },
         {
             desc: 'Moving - 4',
@@ -1355,7 +1413,7 @@ module.controller('rulesCtrl', function(
                 ctx.fillStyle = 'rgba(255, 255, 255, ' + trans + ')';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
             },
-            startAt: 27900
+            lastsFor: 1000
         },
         {
             desc: 'Types of players',
@@ -1367,7 +1425,7 @@ module.controller('rulesCtrl', function(
                     });
                 });
             },
-            startAt: 28900
+            lastsFor: 2000
         },
         {
             desc: 'Types of players: Rayer',
@@ -1381,7 +1439,7 @@ module.controller('rulesCtrl', function(
                 drawText(270, 70, 18, '+ Free x-ray', ImageList[0].imgs[playerKey].color, 'left');
                 drawText(270, 90, 18, '- No shots', ImageList[0].imgs[playerKey].color, 'left');
             },
-            startAt: 30900
+            lastsFor: 2000
         },
         {
             desc: 'Types of players: Booster',
@@ -1395,7 +1453,7 @@ module.controller('rulesCtrl', function(
                 drawText(290, 70, 18, '+ Free shots', ImageList[0].imgs[playerKey].color, 'left');
                 drawText(290, 90, 18, '- No x-ray', ImageList[0].imgs[playerKey].color, 'left');
             },
-            startAt: 32900
+            lastsFor: 2000
         },
         {
             desc: 'Types of players: Hider',
@@ -1408,7 +1466,7 @@ module.controller('rulesCtrl', function(
                 drawText(380, 50, 18, ImageList[0].imgs[playerKey].disp + ":", ImageList[0].imgs[playerKey].color, 'left');
                 drawText(400, 70, 18, '+ Hides from x-ray', ImageList[0].imgs[playerKey].color, 'left');
             },
-            startAt: 34900
+            lastsFor: 2000
         },
         {
             desc: 'Types of players: Booster',
@@ -1423,7 +1481,7 @@ module.controller('rulesCtrl', function(
                 drawText(60, 90, 18, '- expensive shots', ImageList[0].imgs[playerKey].color, 'left');
                 drawText(60, 110, 18, '- expensive x-ray', ImageList[0].imgs[playerKey].color, 'left');
             },
-            startAt: 36900
+            lastsFor: 3000
         },
         {
             desc: 'Types of players: Fatser',
@@ -1440,7 +1498,7 @@ module.controller('rulesCtrl', function(
                 drawText(60, 130, 18, '- no x-ray', 'black', 'left');
                 drawText(60, 150, 18, '- small amount of boost', 'black', 'left');
             },
-            startAt: 38900
+            lastsFor: 3000
         },
         {
             desc: 'Round',
@@ -1450,7 +1508,7 @@ module.controller('rulesCtrl', function(
                 drawImage(300, 130, 60, ImageList[2].imgs[3].img, ImageList[2].color);
                 drawText(300, 230, 18, 'Round lasts for 30 minutes!', 'black');
             },
-            startAt: 40900
+            lastsFor: 2000
         },
         {
             desc: 'Round - 2',
@@ -1461,7 +1519,7 @@ module.controller('rulesCtrl', function(
                 drawText(300, 210, 18, 'After some team is empty', 'black');
                 drawText(300, 230, 18, 'players will be reselected by teams', 'black');
             },
-            startAt: 42900
+            lastsFor: 2000
         },
         {
             desc: 'Round Winner',
@@ -1471,14 +1529,14 @@ module.controller('rulesCtrl', function(
                 drawImage(300, 130, 60, ImageList[2].imgs[3].img, ImageList[2].color);
                 drawText(300, 230, 18, 'Winner is player with maximal score after the end of the round!', 'black');
             },
-            startAt: 44900
+            lastsFor: 2000
         },
         {
             desc: 'Enjoy!',
             execute: function(time) {
                 drawText(300, 150, 20, 'Enjoy! :)', 'black');
             },
-            startAt: 46900
+            lastsFor: 1000
         },
         {
             desc: 'Enjoy! - 2',
@@ -1488,7 +1546,7 @@ module.controller('rulesCtrl', function(
                 ctx.fillStyle = 'rgba(255, 255, 255, ' + trans + ')';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
             },
-            startAt: 47900
+            lastsFor: 1000
         },
         {
             desc: 'Final',
@@ -1500,10 +1558,7 @@ module.controller('rulesCtrl', function(
                     ctx.fillRect(0, 0, canvas.width, canvas.height);
                 }
             },
-            startAt: 48900
-        },
-        {
-            startAt: 100000000000000
+            lastsFor: 1000000000000000
         }
     ];
 
@@ -1516,16 +1571,44 @@ module.controller('rulesCtrl', function(
         ctx.fillStyle = 'white';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+        var cT = curTime;
         for (var it = 0; it < moments.length; it++) {
-            if (moments[it + 1].startAt > curTime) {
-                moments[it].execute(curTime - moments[it].startAt);
+            if (moments[it].lastsFor >= cT) {
+                moments[it].execute(cT);
                 break;
+            } else {
+                cT -= moments[it].lastsFor;
             }
         }
     };
 
+    var totLen = 1000;
+    moments.forEach(function(moment) {
+        if (moment.lastsFor < 1000000) {
+            totLen += moment.lastsFor;
+        }
+    });
+
+    $scope.curProgress = Math.round(curTime / totLen * 405);
+
+    var playerLine = document.getElementById('idManLogoBackground');
+    playerLine.addEventListener('click', function(evt) {
+        var rect = playerLine.getBoundingClientRect();
+        var x = evt.clientX - rect.left;
+        curTime = x / 405 * totLen;
+        $scope.$apply(function() {
+            $scope.curProgress = Math.round(curTime / totLen * 405);
+        });
+    });
+
     setInterval(function() {
         curTime += 50;
+        if (curTime > totLen) {
+            curTime = totLen;
+        }
+        $scope.$apply(function() {
+            $scope.curProgress = Math.round(curTime / totLen * 405);
+        });
         Draw();
     }, 50);
 });

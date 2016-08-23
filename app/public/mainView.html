@@ -1,1 +1,12 @@
-<canvas width="600" height="250" id="mainLogo" class="mainLogo" ng-controller="rulesCtrl"></canvas>
+<div class="mainLogoWrapper" ng-controller="rulesCtrl">
+    <canvas width="600" height="250" id="mainLogo" class="mainLogo">
+    </canvas>
+    <div class="mainLogoRange">
+        <div class="mainLogoRangeBackground" id="idManLogoBackground">
+            <div class="mainLogoRangeLine">
+                <div class="mainLogoRangeLineProgress" ng-style="{width: curProgress + 'px'}"></div>
+                <div class="mainLogoRangeLineCircle" ng-style="{left: curProgress + 'px'}"></div>
+            </div>
+        </div>
+    </div>
+</div>
