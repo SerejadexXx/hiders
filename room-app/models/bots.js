@@ -112,11 +112,12 @@ module.exports = {
             var Power = -1000000000;
 
             for (var speedUp = 0; speedUp < 2; speedUp++) {
+                /*
                 if (speedUp == 1) {
                     if (user.boostSize < 0.05) {
                         break;
                     }
-                }
+                }*/
                 for (var angle = 0; angle < Math.PI * 2; angle += Math.PI / 91) {
                     var coordinates = {
                         x: user.x,

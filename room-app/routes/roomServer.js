@@ -372,10 +372,18 @@ module.exports = {
                     }
 
                     var coof = 1;
-                    if (user.speedUpOn && user.boostSize > 0.05) {
-                        user.boostSize -= 0.05;
-                        coof = user.speedUpMult;
+                    if (user.speedUpOn && user.boostSize < 0.05) {
+                        var ticks = Math.ceil(1 / user.boostIncPerSec);
+                        coof = (ticks - 1 + user.speedUpMult * 0.05) / ticks;
+                        user.boostSize = Math.min(user.boostSize + (user.boostIncPerSec * ticks - 0.5) / ticks, user.maxBoost);
+                    } else {
+                        if (user.speedUpOn && user.boostSize >= 0.05) {
+                            user.boostSize -= 0.05;
+                            coof = user.speedUpMult;
+                        }
+                        user.boostSize = Math.min(user.boostSize + user.boostIncPerSec * 0.05, user.maxBoost);
                     }
+
                     var addX = 0;
                     var addY = 0;
                     var uDist = user.dx * user.dx + user.dy * user.dy;
@@ -386,8 +394,6 @@ module.exports = {
 
                     segmentsSet.TryMoving(user, addX, 0);
                     segmentsSet.TryMoving(user, 0, addY);
-
-                    user.boostSize = Math.min(user.boostSize + user.boostIncPerSec * 0.05, user.maxBoost);
                 });
                 var teamsChanged = false;
                 users.forEach(function (user1) {
