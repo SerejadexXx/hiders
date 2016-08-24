@@ -20,8 +20,9 @@ app.use('/bower_components',  express.static(__dirname + '/bower_components'));
 
 var maxPermittedAmount = 30;
 
-var addresses;
+var addresses = [];
 
+/*
 if (0) {
     addresses = [{
         host: 'localhost',
@@ -37,7 +38,7 @@ if (0) {
         val: 'ws://37.139.26.152:8126',
         amount: 0
     }];
-}
+}*/
 
 app.get('/', function(req, res) {
     res.sendFile('index.html');
@@ -101,5 +102,33 @@ setInterval(function() {
         });
     });
 }, 1000);
+
+setInterval(function() {
+    var options = {
+        host: 'localhost',
+        port: '8081',
+        path: '/list',
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
+
+    createRequest.process(options, function(statusCode, result) {
+        if (result && result.list) {
+            var newList = result.list;
+            newList.forEach(function(address) {
+                address.amount = 0;
+                var old = addresses.filter(function(oldAddress) {
+                   return oldAddress.val == address.val;
+                })[0];
+                if (old && old.amount) {
+                    address.amount = old.amount;
+                }
+            });
+            addresses = newList;
+        }
+    });
+}, 2000);
 
 module.exports = app;

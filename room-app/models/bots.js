@@ -130,7 +130,7 @@ module.exports = {
                     ApplyVector(
                         coordinates,
                         dx, dy,
-                        speedUp ? user.speedUpMult : 1
+                        speedUp ? (Math.min(user.boostSize, 0.5) / 0.5 * user.speedUpMult) : 1
                     );
                     ApplyBorders(coordinates, user.radius, segments);
                     var tempPower = CalcPointPowerByClose(
@@ -176,7 +176,7 @@ module.exports = {
             ApplyVector(
                 endUser,
                 ret.dx, ret.dy,
-                ret.speedUp ? user.speedUpMult : 1
+                ret.speedUp ? (Math.min(user.boostSize, 0.5) / 0.5 * user.speedUpMult) : 1
             );
 
             ApplyBorders(
