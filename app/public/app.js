@@ -1117,18 +1117,18 @@ module.controller('rulesCtrl', function(
             lastsFor: 2000
         },
         {
-            desc: 'More points he had - more you earned!',
+            desc: 'The more points he have the more you earned!',
             execute: function(time) {
-                drawText(300, 200, 18, 'More points he had, more you earn!', TeamsList[1].color);
+                drawText(300, 200, 18, 'The more points he have the more you earn!', TeamsList[1].color);
                 drawImage(220, 100, 100, TeamsList[1].img, TeamsList[1].color);
                 drawImage(300, 100, 100, TeamsList[1].img, TeamsList[1].color);
             },
             lastsFor: 1000
         },
         {
-            desc: 'More points he had - more you earned! - disappears',
+            desc: 'The more points he have the more you earn! - disappears',
             execute: function(time) {
-                drawText(300, 200, 18, 'More points he had, more you earn!', TeamsList[1].color);
+                drawText(300, 200, 18, 'The more points he have the more you earn!', TeamsList[1].color);
                 drawImage(220, 100, 100, TeamsList[1].img, TeamsList[1].color);
                 drawImage(300, 100, 100, TeamsList[1].img, TeamsList[1].color);
                 var trans = time / 1000;
@@ -1172,7 +1172,7 @@ module.controller('rulesCtrl', function(
         {
             desc: 'Vision - 2',
             execute: function(time) {
-                drawText(70, 90, 15, 'Walls blocks vision!', 'black');
+                drawText(70, 90, 15, 'Walls block vision!', 'black');
                 drawText(75, 110, 15, 'Only players in vision', 'black');
                 drawText(75, 130, 15, 'are visible!', 'black');
                 var trans = 1 - time / 1000;
@@ -1192,17 +1192,44 @@ module.controller('rulesCtrl', function(
                 grd.addColorStop(0, 'rgba(0, 255, 0, ' + (Math.random() / 50 + 1 / 8) + ')');
                 grd.addColorStop(1, "white");
 
+                var angle1 = Math.atan2(-100, -70);
+                var angle2 = Math.atan2(-30, -70);
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(x, y, 150, angle1, angle2);
+                ctx.lineTo(x - 70, y - 30);
+                ctx.lineTo(x - 70, y - 100);
+                ctx.lineTo(x + Math.cos(angle2) * 150, y + Math.cos(angle2) * 150);
+                ctx.clip();
                 ctx.beginPath();
                 ctx.fillStyle = grd;
                 ctx.arc(x, y, 150, 0, 2 * Math.PI);
                 ctx.fill();
+                ctx.restore();
+
+                ctx.strokeStyle = 'black';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(x - 70, y - 30);
+                ctx.lineTo(x - 70, y - 100);
+                ctx.stroke();
+
+                ctx.setLineDash([1, 6]);
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(x - 72, y - 30);
+                ctx.lineTo(x - 72, y - 100);
+                ctx.moveTo(x - 67, y - 30);
+                ctx.lineTo(x - 67, y - 100);
+                ctx.stroke();
+                ctx.setLineDash([]);
 
                 drawImage(x, y, 60, TeamsList[2].img, TeamsList[2].color);
 
                 drawText(70, 50, 15, 'Light green around', 'black');
                 drawText(70, 70, 15, 'is vision!', 'black');
             },
-            lastsFor: 2000
+            lastsFor: 3000
         },
         {
             desc: 'Vision - 3',
@@ -1227,20 +1254,47 @@ module.controller('rulesCtrl', function(
                 grd.addColorStop(0, 'rgba(0, 255, 0, ' + (Math.random() / 50 + 1 / 8) + ')');
                 grd.addColorStop(1, "white");
 
+                var angle1 = Math.atan2(-100, -70);
+                var angle2 = Math.atan2(-30, -70);
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(x, y, 150, angle1, angle2);
+                ctx.lineTo(x - 70, y - 30);
+                ctx.lineTo(x - 70, y - 100);
+                ctx.lineTo(x + Math.cos(angle2) * 150, y + Math.cos(angle2) * 150);
+                ctx.clip();
                 ctx.beginPath();
                 ctx.fillStyle = grd;
                 ctx.arc(x, y, 150, 0, 2 * Math.PI);
                 ctx.fill();
+                ctx.restore();
+
+                ctx.strokeStyle = 'black';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(x - 70, y - 30);
+                ctx.lineTo(x - 70, y - 100);
+                ctx.stroke();
+
+                ctx.setLineDash([1, 6]);
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(x - 72, y - 30);
+                ctx.lineTo(x - 72, y - 100);
+                ctx.moveTo(x - 67, y - 30);
+                ctx.lineTo(x - 67, y - 100);
+                ctx.stroke();
+                ctx.setLineDash([]);
 
                 drawImage(x, y, 60, TeamsList[2].img, TeamsList[2].color);
 
                 drawText(70, 50, 15, 'Light green around', 'black');
                 drawText(70, 70, 15, 'is vision!', 'black');
-                drawText(70, 90, 15, 'Walls blocks vision!', 'black');
+                drawText(70, 90, 15, 'Walls block vision!', 'black');
                 drawText(75, 110, 15, 'Only players in vision', 'black');
                 drawText(75, 130, 15, 'are visible!', 'black');
             },
-            lastsFor: 2000
+            lastsFor: 3000
         },
         {
             desc: 'Moving',
@@ -1307,7 +1361,7 @@ module.controller('rulesCtrl', function(
 
                 drawImage(x, y, 60, TeamsList[1].img, TeamsList[1].color);
             },
-            lastsFor: 2000
+            lastsFor: 3000
         },
         {
             desc: 'Moving - 3',
@@ -1346,7 +1400,7 @@ module.controller('rulesCtrl', function(
 
                 drawImage(x, y, 60, TeamsList[1].img, TeamsList[1].color);
             },
-            lastsFor: 2000
+            lastsFor: 3000
         },
         {
             desc: 'Moving - 3',
@@ -1389,7 +1443,7 @@ module.controller('rulesCtrl', function(
 
                 drawImage(x, y, 60, TeamsList[1].img, TeamsList[1].color);
             },
-            lastsFor: 2000
+            lastsFor: 4000
         },
         {
             desc: 'Moving - 4',
@@ -1606,13 +1660,51 @@ module.controller('rulesCtrl', function(
     $scope.curProgress = Math.round(curTime / totLen * 405);
 
     var playerLine = document.getElementById('idManLogoBackground');
-    playerLine.addEventListener('click', function(evt) {
+    var mouseDown = false;
+    document.addEventListener('mousedown', function(evt) {
         var rect = playerLine.getBoundingClientRect();
         var x = evt.clientX - rect.left;
         curTime = x / 405 * totLen;
+        if (curTime < 0) {
+            curTime = 0;
+        }
+        if (curTime > totLen) {
+            curTime = totLen;
+        }
         $scope.$apply(function() {
             $scope.curProgress = Math.round(curTime / totLen * 405);
         });
+        mouseDown = true;
+    });
+    document.addEventListener('mousemove', function(evt) {
+        if (mouseDown) {
+            var rect = playerLine.getBoundingClientRect();
+            var x = evt.clientX - rect.left;
+            curTime = x / 405 * totLen;
+            if (curTime < 0) {
+                curTime = 0;
+            }
+            if (curTime > totLen) {
+                curTime = totLen;
+            }
+            $scope.$apply(function () {
+                $scope.curProgress = Math.round(curTime / totLen * 405);
+            });
+        }
+    });
+    document.addEventListener('mouseout', function(evt) {
+       var from = evt.relatedTarget || evt.toElement;
+       if (!from || from.nodeName == "HTML") {
+           if (mouseDown) {
+               mouseDown = false;
+           }
+       }
+    });
+    document.addEventListener('mouseup', function(evt) {
+        if (mouseDown) {
+            console.log('shit2');
+            mouseDown = false;
+        }
     });
 
     setInterval(function() {
