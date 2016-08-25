@@ -291,6 +291,10 @@ module.controller('mainCtrl', function(
     $scope.CloseShit = function() {
         $scope.ShowShit = false;
     };
+    $scope.FBReady = false;
+    $rootScope.$watch('FBReady', function() {
+        $scope.FBReady = $rootScope.FBReady;
+    });
 
     var lastAdShow = Date.now();
     var canShowAd = false;
