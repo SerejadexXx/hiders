@@ -103,7 +103,7 @@ module.run(['$rootScope', '$window', 'srvAuth',
             js = d.createElement('script');
             js.id = id;
             js.async = true;
-            js.src = "//connect.facebook.net/en_US/all.js";
+            js.src = "http://connect.facebook.net/en_US/all.js";
 
             ref.parentNode.insertBefore(js, ref);
 
