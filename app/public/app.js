@@ -785,7 +785,7 @@ module.controller('mainCtrl', function(
                 ctx.strokeStyle = 'lightgrey';
                 ctx.lineWidth = 1;
 
-                for (var dx = -visibleWidth / 2; dx <= segmentsFunctional.GetWidth() + visibleWidth; dx += 20) {
+                for (var dx = -(visibleWidth / 2 - visibleWidth / 2 % 20); dx <= segmentsFunctional.GetWidth() + visibleWidth; dx += 20) {
                     ctx.moveTo(
                         dx - user.x + visibleWidth / 2,
                         segmentsFunctional.GetHeight() - user.y + visibleHeight / 2 + visibleHeight / 2
@@ -813,7 +813,7 @@ module.controller('mainCtrl', function(
                     );
                     */
                 }
-                for (var dy = -visibleHeight / 2; dy <= segmentsFunctional.GetHeight() + visibleHeight; dy += 20) {
+                for (var dy = -(visibleHeight / 2 - visibleHeight / 2 % 20); dy <= segmentsFunctional.GetHeight() + visibleHeight; dy += 20) {
                     ctx.moveTo(
                         segmentsFunctional.GetWidth() - user.x + visibleWidth / 2 + visibleWidth / 2,
                         dy - user.y + visibleHeight / 2
@@ -840,6 +840,18 @@ module.controller('mainCtrl', function(
                     );*/
                 }
                 ctx.stroke();
+
+                ctx.beginPath();
+                ctx.globalCompositeOperation = 'source-over';
+                ctx.strokeStyle = 'red';
+                ctx.lineWidth = 1;
+                ctx.moveTo(0 - user.x + visibleWidth / 2 - 60, 0 - user.y + visibleHeight / 2 - 60);
+                ctx.lineTo(segmentsFunctional.GetWidth() - user.x + visibleWidth / 2 + 60, 0 - user.y + visibleHeight / 2 - 60);
+                ctx.lineTo(segmentsFunctional.GetWidth() - user.x + visibleWidth / 2 + 60, segmentsFunctional.GetHeight() - user.y + visibleHeight / 2 + 60);
+                ctx.lineTo(0 - user.x + visibleWidth / 2 - 60, segmentsFunctional.GetHeight() - user.y + visibleHeight / 2 + 60);
+                ctx.lineTo(0 - user.x + visibleWidth / 2 - 60, 0 - user.y + visibleHeight / 2 - 60);
+                ctx.stroke();
+
                 ctx.beginPath();
                 ctx.strokeStyle = 'black';
                 ctx.setLineDash([3, 6]);
