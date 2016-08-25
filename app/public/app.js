@@ -782,11 +782,19 @@ module.controller('mainCtrl', function(
 
                 ctx.beginPath();
                 ctx.globalCompositeOperation = 'source-over';
-                ctx.strokeStyle = 'black';
-                ctx.setLineDash([1, 6]);
+                ctx.strokeStyle = 'lightgrey';
                 ctx.lineWidth = 1;
 
-                for (var dx = -visibleWidth / 2; dx <= segmentsFunctional.GetWidth() + visibleWidth; dx += 7) {
+                for (var dx = -visibleWidth / 2; dx <= segmentsFunctional.GetWidth() + visibleWidth; dx += 20) {
+                    ctx.moveTo(
+                        dx - user.x + visibleWidth / 2,
+                        segmentsFunctional.GetHeight() - user.y + visibleHeight / 2 + visibleHeight / 2
+                    );
+                    ctx.lineTo(
+                        dx - user.x + visibleWidth / 2,
+                        0 - user.y + visibleHeight / 2 - visibleHeight / 2
+                    );
+                    /*
                     ctx.moveTo(
                         dx - user.x + visibleWidth / 2,
                         0 - user.y + visibleHeight / 2
@@ -803,9 +811,18 @@ module.controller('mainCtrl', function(
                         dx - user.x + visibleWidth / 2,
                         segmentsFunctional.GetHeight() - user.y + visibleHeight / 2 + visibleHeight / 2
                     );
+                    */
                 }
-                for (var dy = 1; dy < segmentsFunctional.GetHeight(); dy += 7) {
+                for (var dy = -visibleHeight / 2; dy <= segmentsFunctional.GetHeight() + visibleHeight; dy += 20) {
                     ctx.moveTo(
+                        segmentsFunctional.GetWidth() - user.x + visibleWidth / 2 + visibleWidth / 2,
+                        dy - user.y + visibleHeight / 2
+                    );
+                    ctx.lineTo(
+                        0 - user.x + visibleWidth / 2 - visibleWidth / 2,
+                        dy - user.y + visibleHeight / 2
+                    );
+                    /*ctx.moveTo(
                         0 - user.x + visibleWidth / 2,
                         dy - user.y + visibleHeight / 2
                     );
@@ -820,8 +837,12 @@ module.controller('mainCtrl', function(
                     ctx.lineTo(
                         segmentsFunctional.GetWidth() - user.x + visibleWidth / 2 + visibleWidth / 2,
                         dy - user.y + visibleHeight / 2
-                    );
+                    );*/
                 }
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.strokeStyle = 'black';
+                ctx.setLineDash([3, 6]);
                 segments.forEach(function (segment) {
                     ctx.moveTo(segment.p1.x - user.x + visibleWidth / 2, segment.p1.y - user.y + visibleHeight / 2);
                     ctx.lineTo(segment.p2.x - user.x + visibleWidth / 2, segment.p2.y - user.y + visibleHeight / 2);
@@ -840,7 +861,6 @@ module.controller('mainCtrl', function(
                 ctx.stroke();
                 ctx.lineWidth = 2;
                 ctx.setLineDash([]);
-
 
                 closePlayersList.forEach(function (player) {
                     var closeUser = usersInfoList.filter(function (user) {
@@ -1364,7 +1384,7 @@ module.controller('rulesCtrl', function(
                 ctx.lineTo(x - 70, y - 100);
                 ctx.stroke();
 
-                ctx.setLineDash([1, 6]);
+                ctx.setLineDash([3, 6]);
                 ctx.lineWidth = 1;
                 ctx.beginPath();
                 ctx.moveTo(x - 72, y - 30);
