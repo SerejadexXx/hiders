@@ -373,7 +373,7 @@ module.exports = {
 
                     var coof = 1;
                     if (user.speedUpOn && user.boostSize < 0.05) {
-                        coof = user.speedUpMult * user.boostSize / 0.05;
+                        coof = 1 + (user.speedUpMult - 1) * user.boostSize / 0.05;
                         user.boostSize = Math.min(user.boostIncPerSec * 0.05, user.maxBoost);
                     } else {
                         if (user.speedUpOn && user.boostSize >= 0.05) {
