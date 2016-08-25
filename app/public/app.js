@@ -295,8 +295,8 @@ module.controller('mainCtrl', function(
         if (Date.now() < lastAdShow + 3 * 60 * 1000) {
             return;
         }
-        if (localStorage.getItem('sharedFB') != '1' && canShowAd) {
-            //$scope.ShowShit = true;
+        if (localStorage.getItem('sharedFB') != '1') {
+            $scope.ShowShit = true;
             lastAdShow = Date.now();
         }
     }, 200);
