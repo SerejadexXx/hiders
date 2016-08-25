@@ -42,8 +42,8 @@ module.run(['$rootScope', '$window', 'srvAuth',
 
         $rootScope.user = {};
 
-        $window.fbAsyncInit = function() {
-            // Executed when the SDK is loaded
+
+            // Executed when the SDK is loaded         
 
             FB.init({
 
@@ -87,7 +87,7 @@ module.run(['$rootScope', '$window', 'srvAuth',
 
             sAuth.watchLoginChange();
 
-        };
+
 
         (function(d){
             // load the Facebook javascript SDK
