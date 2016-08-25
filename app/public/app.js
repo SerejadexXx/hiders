@@ -267,11 +267,11 @@ module.controller('mainCtrl', function(
         FB.ui(
             {
                 method: 'feed',
-                name: 'Facebook Dialogs',
-                link: 'https://developers.facebook.com/docs/dialogs/',
-                picture: 'http://fbrell.com/f8.jpg',
-                caption: 'Reference Documentation',
-                description: 'Dialogs provide a simple, consistent interface for applications to interface with users.'
+                name: 'Hiders',
+                link: 'http://hiders.rocks/',
+                picture: 'http://hiders.rocks/assets/logo.png',
+                caption: 'Hiders',
+                description: 'Play new vision of paper-rock-scissors game!'
             },
             function(response) {
                 if (response && response.post_id) {
