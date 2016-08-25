@@ -1,4 +1,4 @@
-var module = angular.module('indexApp', ['srvAuth']);
+var module = angular.module('indexApp', []);
 
 module.run(['$rootScope', '$window', 'srvAuth',
     function($rootScope, $window, sAuth) {
@@ -69,7 +69,8 @@ module.run(['$rootScope', '$window', 'srvAuth',
 
         }(document));
 
-    }]);
+    }]
+);
 
 module.filter('formatSeconds', [function() {
     return function(seconds) {
