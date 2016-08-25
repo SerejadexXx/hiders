@@ -148,10 +148,6 @@ module.controller('mainCtrl', function(
     ASSETS,
     $rootScope
 ) {
-    FB.Event.subscribe('edge.create', function() {
-        console.log('shared');
-    });
-
     $scope.showLanding = false;
     if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
         $scope.showLanding = true;

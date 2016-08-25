@@ -48,11 +48,13 @@
 <body ng-app="indexApp" ng-controller="mainCtrl" style="overflow: hidden">
 <script>
     window.fbAsyncInit = function() {
-        console.log('shit');
         FB.init({
             appId      : '327655160958274',
             xfbml      : true,
             version    : 'v2.7'
+        });
+        FB.Event.subscribe('edge.create', function() {
+            console.log('shared');
         });
     };
 
