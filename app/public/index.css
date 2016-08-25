@@ -391,6 +391,14 @@
     transition: opacity 200ms linear, top 200ms linear;
 }
 
+.adPlace {
+    position: absolute;
+    top: 40px;
+    left: 10px;
+    right: 10px;
+    bottom: 100px;
+}
+
 .shitAdsIcon {
     position: absolute;
     top: 10px;
