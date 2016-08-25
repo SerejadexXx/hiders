@@ -292,10 +292,10 @@ module.controller('mainCtrl', function(
     var lastAdShow = Date.now();
     var canShowAd = false;
     $interval(function() {
-        if (Date.now() < lastAdShow + 3 * 60 * 10) {
+        if (Date.now() < lastAdShow + 3 * 60 * 1000) {
             return;
         }
-        if (localStorage.getItem('sharedFB') != '1') {
+        if (localStorage.getItem('sharedFB') != '1' && canShowAd) {
             $scope.ShowShit = true;
             lastAdShow = Date.now();
         }
