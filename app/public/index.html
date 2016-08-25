@@ -70,6 +70,7 @@
                     </div>
                     <div class="row textCenter">
                         <button class="btn roomEnterButton" ng-click="EnterRoom()">Enter free room</button>
+                        <button class="btn roomEnterButton" ng-click="ShareFB()">Share on facebook</button>
                     </div>
                     <div class="row textCenter roomEnterError">
                         {{serverError}}
@@ -79,9 +80,6 @@
                         <iframe src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fhiders.rocks&layout=button_count&size=large&mobile_iframe=true&appId=327655160958274&width=106&height=28" width="106" height="28" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
                     </div>
                     -->
-                    <div class="row textCenter">
-                        <button class="btn roomEnterButton" ng-click="ShareFB()">Share on facebook</button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -288,6 +286,13 @@
             </div>
         </div>
     </div>
+    </div>
+    <div class="shitAds" ng-style="{opacity: ShowShit ? 1 : 0, top: ShowShit ? '100px' : '-700px'}">
+        <div class="shitAdsIcon">
+            <i class="glyphicon glyphicon-remove" ng-click="CloseShit()"></i>
+        </div>
+        <h4 class="shotAdsFbText">I know you tired of this, just share on facebook <br> It won't appears after :) </h4>
+        <button class="btn shotAdsFbShare" ng-click="ShareFB()">Share</button>
     </div>
 </body>
 </html>

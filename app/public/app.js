@@ -255,7 +255,8 @@ module.controller('mainCtrl', function(
     $http,
     $timeout,
     ASSETS,
-    $rootScope
+    $rootScope,
+    $interval
 ) {
     $scope.showLanding = false;
     if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
@@ -275,13 +276,30 @@ module.controller('mainCtrl', function(
             },
             function(response) {
                 if (response && response.post_id) {
-                    alert('Post was published.');
+                    //alert('Post was published.');
+                    localStorage.setItem('sharedFB', '1');
                 } else {
-                    alert('Post was not published.');
+                    //alert('Post was not published.');
                 }
             }
         );
     };
+    $scope.ShowShit = false;
+    $scope.CloseShit = function() {
+        $scope.ShowShit = false;
+    };
+
+    var lastAdShow = Date.now();
+    var canShowAd = false;
+    $interval(function() {
+        if (Date.now() < lastAdShow + 3 * 60 * 1000) {
+            return;
+        }
+        if (localStorage.getItem('sharedFB') != '1' && canShowAd) {
+            $scope.ShowShit = true;
+            lastAdShow = Date.now();
+        }
+    }, 200);
 
     var mainInterval;
     var keydownEventListener;
@@ -556,6 +574,7 @@ module.controller('mainCtrl', function(
                         $scope.winnerState.user = JSON.parse(JSON.stringify(user));
                     } else {
                         $scope.winnerState.winnerList = null;
+                        canShowAd = true;
                     }
                     $scope.winnerState.val = 'on';
                     $scope.winnerState.winnerTeam = data.winnerTeam;
@@ -632,6 +651,7 @@ module.controller('mainCtrl', function(
                     setTimeout(function () {
                         $scope.$apply(function () {
                             $scope.winnerState.val = 'off';
+                            canShowAd = false;
                         });
                     }, 2000);
                 }
@@ -1832,7 +1852,6 @@ module.controller('rulesCtrl', function(
     });
     document.addEventListener('mouseup', function(evt) {
         if (mouseDown) {
-            console.log('shit2');
             mouseDown = false;
         }
     });
