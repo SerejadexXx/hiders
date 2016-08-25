@@ -262,6 +262,27 @@ module.controller('mainCtrl', function(
         $scope.showLanding = true;
         return;
     }
+
+    $scope.ShareFB = function() {
+        FB.ui(
+            {
+                method: 'feed',
+                name: 'Facebook Dialogs',
+                link: 'https://developers.facebook.com/docs/dialogs/',
+                picture: 'http://fbrell.com/f8.jpg',
+                caption: 'Reference Documentation',
+                description: 'Dialogs provide a simple, consistent interface for applications to interface with users.'
+            },
+            function(response) {
+                if (response && response.post_id) {
+                    alert('Post was published.');
+                } else {
+                    alert('Post was not published.');
+                }
+            }
+        );
+    };
+
     var mainInterval;
     var keydownEventListener;
     var mousedownEventListener;
