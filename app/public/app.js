@@ -81,6 +81,7 @@ module.run(['$rootScope', '$window', 'srvAuth',
 
                 xfbml: true
             });
+            $rootScope.FBReady = 1;
 
             sAuth.watchLoginChange();
 

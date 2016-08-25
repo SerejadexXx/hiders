@@ -70,7 +70,7 @@
                     </div>
                     <div class="row textCenter">
                         <button class="btn roomEnterButton" ng-click="EnterRoom()">Enter free room</button>
-                        <button class="btn roomEnterButton" ng-click="ShareFB()">Share on facebook</button>
+                        <button class="btn roomEnterButton" ng-click="ShareFB()" ng-show="FBReady">Share on facebook</button>
                     </div>
                     <div class="row textCenter roomEnterError">
                         {{serverError}}
@@ -295,7 +295,7 @@
             <h3>Just share the link and you won't see this here!</h3>
         </div>
 <!--        <h4 class="shotAdsFbText">I know you tired of this, just share on facebook <br> It won't appears after :) </h4> -->
-        <button class="btn shotAdsFbShare" ng-click="ShareFB()">Share</button>
+        <button class="btn shotAdsFbShare" ng-click="ShareFB()" ng-show="FBReady">Share</button>
     </div>
 </body>
 </html>
